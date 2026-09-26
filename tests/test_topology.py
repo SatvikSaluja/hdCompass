@@ -24,3 +24,9 @@ def test_gaussian_blob_is_not_ring():
     null = shuffle_null(X, n_shuffles=10, n_landmarks=200)
     ring, p = is_ring(X, null, n_landmarks=200)
     assert not ring and p > 0.05
+
+
+def test_is_ring_needs_to_beat_every_shuffle_when_few():
+    null = [1.0, 1.0, 1.0, 1.4, 1.6]
+    assert is_ring(1.58, null) == (False, 2 / 6)
+    assert is_ring(1.61, null)[0]

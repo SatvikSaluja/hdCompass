@@ -88,13 +88,15 @@ def is_ring(X, null, alpha=0.05, n_landmarks=800, n_pcs=10, seed=0):
     Returns
     -------
     ring : bool
-        ``ring_score(X)`` exceeds the ``1 − alpha`` quantile of the null. The decision uses the
-        quantile, not ``p < alpha``, because with few shuffles the p-value floor
-        ``1 / (n + 1)`` can exceed ``alpha``.
+        ``ring_score(X)`` exceeds the ``1 − alpha`` quantile of the null, taken as an actual
+        null value (``method="higher"``, never interpolated, so with ``n ≤ 1/alpha`` shuffles
+        the score must beat every shuffle). The decision uses the quantile, not
+        ``p < alpha``, because with few shuffles the p-value floor ``1 / (n + 1)`` can exceed
+        ``alpha``.
     p : float
         Permutation p-value ``(1 + #{null ≥ score}) / (n + 1)``.
     """
     null = np.asarray(null, dtype=float)
     score = float(X) if np.isscalar(X) else ring_score(X, n_landmarks, n_pcs, seed)
     p = (1 + np.sum(null >= score)) / (len(null) + 1)
-    return bool(score > np.quantile(null, 1 - alpha)), float(p)
+    return bool(score > np.quantile(null, 1 - alpha, method="higher")), float(p)
