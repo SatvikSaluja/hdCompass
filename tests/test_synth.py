@@ -25,3 +25,16 @@ def test_empirical_rates_match_tuning():
         emp = np.bincount(occ_bin[idx], minlength=12) / occupancy
         expected = np.bincount(occ_bin, weights=rates[i], minlength=12) / (occupancy / 0.001)
         assert np.abs(emp - expected).sum() / expected.sum() < 0.2
+
+
+def test_simulate_session_structure():
+    from hdcompass.synth import simulate_session
+
+    s, truth = simulate_session(n_cells=8, wake=30, rem=40, sws=70, rem_epoch=20, sws_epoch=30)
+    assert s.wake.tot_length() == 30 and s.rem.tot_length() == 40 and s.sws.tot_length() == 70
+    assert len(s.rem) == 2 and len(s.sws) == 3
+    assert s.wake.intersect(s.sws).tot_length() == 0 and s.rem.intersect(s.sws).tot_length() == 0
+    assert s.angle.time_support.tot_length() == 30  # tracked angle only in wake, like real data
+    assert truth.time_support.tot_length() == 140
+    for ep in (s.wake, s.rem, s.sws):  # every state has spikes from the same cells
+        assert all(len(s.spikes[k].restrict(ep)) > 0 for k in s.spikes.keys())

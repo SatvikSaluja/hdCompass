@@ -39,20 +39,32 @@ def _save_figs(figs, out):
 
 
 def run_mouse32(out, quick=False, data=None, overwrite=False):
-    """Full label-free pipeline on Mouse32; writes ``report.json`` and PNGs to ``out``.
+    """:func:`run_pipeline` on Mouse32-140822. Returns ``(report, figs)``."""
+    if (Path(out) / "report.json").exists() and not overwrite:
+        raise FileExistsError(f"{Path(out) / 'report.json'} exists; use --overwrite")
+    report, figs, _ = run_pipeline(load_mouse32(data), out, quick, overwrite)
+    return report, figs
 
-    Head angle is used only to validate (alignment error) and to colour figures; the ring,
-    tuning curves and decoders are built from spikes alone.
+
+def run_pipeline(s, out, quick=False, overwrite=False):
+    """Full label-free pipeline on a :class:`~hdcompass.datasets.Session`.
+
+    Writes ``report.json`` and PNGs to ``out``. ``s.angle`` (head angle) is used only to validate
+    (alignment error) and to colour figures; the ring, tuning curves and decoders are built from
+    spikes alone.
 
     Returns
     -------
     report : dict
     figs : dict[str, Figure]
+    details : dict
+        In-memory intermediates for further validation: ``spikes`` (units used), ``rates``,
+        ``ring_angle``, ``tuning_ring``, ``tuning_head``, ``results`` (DecodeResult per state),
+        ``states`` (epochs analysed), ``sigma_grid``.
     """
     out = Path(out)
     if (out / "report.json").exists() and not overwrite:
         raise FileExistsError(f"{out / 'report.json'} exists; use --overwrite")
-    s = load_mouse32(data)
     states = {"wake": s.wake, "rem": s.rem, "sws": s.sws}
     if quick:
         states = {k: first_seconds(v, QUICK_SECONDS) for k, v in states.items()}
@@ -114,9 +126,20 @@ def run_mouse32(out, quick=False, data=None, overwrite=False):
         ),
         "dynamics": plot_state_dynamics(dyn),
     }
-    save_json(report, out / "report.json", overwrite)
+    out.mkdir(parents=True, exist_ok=True)
     _save_figs(figs, out)
-    return report, figs
+    save_json(report, out / "report.json", overwrite)
+    details = {
+        "spikes": spikes,
+        "rates": rates,
+        "ring_angle": ring_ang,
+        "tuning_ring": tc_ring,
+        "tuning_head": tc_head,
+        "results": results,
+        "states": states,
+        "sigma_grid": sigma_grid,
+    }
+    return report, figs, details
 
 
 def run_sweep(out, quick=False, overwrite=False):
