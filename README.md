@@ -62,9 +62,11 @@ pass `--overwrite`.
 ## Full runs
 
 ```bash
+.venv/bin/pip install -e '.[dev,dandi]'           # dandi extra: streaming for DANDI:000939
 .venv/bin/python scripts/run_mouse32.py          # → results/mouse32/ (~12 min)
 .venv/bin/python scripts/run_synthetic_sweep.py  # → results/sweep/ (4 sizes × 3 κ × 3 seeds, ~1 h)
-.venv/bin/python scripts/validate.py real|synthetic|topology|sweep   # → results/validation/
+.venv/bin/python scripts/validate.py real|synthetic|topology|sweep|decisions  # → results/validation/
+.venv/bin/python scripts/run_dandi000939.py       # 22 post-subiculum sessions (~1 h, streams ~60 MB each)
 ```
 
 `notebooks/figures.py` (jupytext percent format) regenerates all figures.
@@ -79,8 +81,13 @@ Full runs and validation completed 2026-09-27. Details, tables and caveats are i
   for independent bins and 0.21 for a decoder trained on tracked head angle.
 - **Compass dynamics by state:** σ = 0.54 (wake), 0.96 (REM), 2.97 (SWS) rad/√s. SWS is also
   about 10× less certain than wake. A uniform firing-rate gain drop doesn't explain this.
-- **The pre-specified H1 ring test is negative on the full wake** (score 1.04, p = 0.48). An
-  exploratory density-filtered variant detects the ring strongly (4.92 vs null max 1.48).
+- **The ring test as first specified misses the ring** on the full wake (score 1.04,
+  p = 0.48). A density filter (k-NN codensity, Carlsson et al. 2008) adopted by pre-registered
+  checks detects it (4.92, p = 1/201) and is now the pipeline default.
+- **It generalises to a second dataset and region.** On 22 post-subiculum sessions
+  (DANDI:000939, analysis plan fixed in advance) the label-free decoder reaches a median
+  0.36 rad. σ SWS > wake in 21/22 (p = 1.8e-5), SWS > REM in 19/20, and SWS variance > wake in
+  21/22. REM ≈ wake there, and the ring test detects a ring in only 12/22.
 - **Validated on ground truth.** Over 17,000 s Mouse32-shaped simulations (2 seeds), the
   label-free pipeline is within 0.012 rad of an oracle decoder in every state and recovers σ to
   the nearest grid point in wake and REM. It undercounts SWS jumps about 20×.
@@ -88,19 +95,25 @@ Full runs and validation completed 2026-09-27. Details, tables and caveats are i
 
 ## Limitations
 
-- **One session, few cells.** Mouse32-140822 has 31 ADn units; units under 1 Hz on wake are
-  dropped (`min_rate`). All conclusions are for this one animal and session.
+- **One ADn session, few cells.** Mouse32-140822 has 31 ADn units; units under 1 Hz on wake
+  are dropped (`min_rate`). The SWS result replicates on 22 post-subiculum sessions
+  (DANDI:000939), but ADn replication needs more sessions (CRCNS th-1).
 - **Isomap hyperparameters.** `n_neighbors=15`, PCA to 10 dims and the 4000-point fit
   subsample are fixed choices, not tuned; the ring angle can depend on them.
 - **Epoch-edge guard.** pynapple's `smooth` zero-pads at epoch edges (pynapple#623). We smooth
   each epoch separately and drop bins within 2·`smooth_std` of every edge, which removes
   those bins from analysis rather than correcting them.
 - **Sleep uses wake tuning.** Tuning curves are fitted on wake and applied unchanged to REM and
-  SWS; no correction for state-dependent gain.
+  SWS. A uniform gain correction was tested and rejected by likelihood (RESULTS.md §3.5);
+  per-cell rate changes are untested.
 - **Jump probability ε is fixed** (default 0), not fitted; only σ is chosen by likelihood.
 - **Ring test resolution.** With `n` shuffles the permutation p-value cannot go below
   `1/(n+1)`; `is_ring` therefore decides by the null's 95th percentile and reports p
-  separately (5 shuffles in `--quick`, 20 in full runs).
+  separately (5 shuffles in `--quick`, 20 in full runs). The ring test is the least sensitive
+  stage: it found a ring in only 12 of 22 DANDI:000939 sessions, though decoding worked in most.
+- **σ is quantised** on a 12-point grid (factor 1.76 per step), and **posterior variances are
+  overconfident on real data** (90% intervals cover 64%), so treat them as relative across
+  states.
 
 ## References
 
@@ -109,6 +122,13 @@ Full runs and validation completed 2026-09-27. Details, tables and caveats are i
 - Chaudhuri R, Gerçek B, Pandey B, Peyrache A, Fiete I (2019). The intrinsic attractor manifold
   and population dynamics of a canonical cognitive circuit across waking and sleep.
   *Nature Neuroscience* 22:1512–1520.
+- Carlsson G, Ishkhanov T, de Silva V, Zomorodian A (2008). On the local behavior of spaces of
+  natural images. *International Journal of Computer Vision* 76:1–12. (Codensity filter used
+  by the ring test.)
+- Duszkiewicz A, Skromne Carrasco S, Peyrache A (2026). Large-scale recordings of head direction
+  cells in mouse postsubiculum (Version 0.260512.1701) [Data set]. DANDI Archive.
+  https://doi.org/10.48324/dandi.000939/0.260512.1701 (CC-BY-4.0; original study Duszkiewicz
+  et al. 2024, *Nature Neuroscience*).
 - Rubin A, Sheintuch L, Brande-Eilat N, Pinchasof O, Rechavi Y, Geva N, Ziv Y (2019). Revealing
   neural correlates of behavior without behavioral measurements. *Nature Communications*
   10:4745.

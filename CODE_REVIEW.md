@@ -12,9 +12,12 @@
 > | R3 σ grid edge | **Checked:** no fit at a grid edge; still no automatic flag in `DecodeResult` |
 > | R4 `is_ring` interpolation | **Fixed** (`method="higher"`), with a test |
 > | R5 pipeline untested | **Fixed:** `run_pipeline(session)` plus a synthetic-session end-to-end test |
-> | R6 CI never run | Open (no remote) |
+> | R6 CI never run | **Done:** CI green on Python 3.11 and 3.12 since the first push; `requires-python` raised to 3.11 |
 > | C7 calibration | **Measured:** 64% coverage on real data, 90–92% on synthetic |
-> | New | The as-specified H1 test is negative on the full real wake; density filtering fixes it (exploratory) |
+> | C1 serial shuffle null | **Done:** `shuffle_null(n_jobs=...)` (spawn workers, identical results); Mouse32 full run 12 min → 3 min |
+| N1 `is_ring` 0-d arrays | **Fixed** (`np.ndim(X) == 0`) |
+| N6 report written before figures | **Fixed** in the `run_pipeline` split |
+| New | The as-specified H1 test is negative on the full real wake. The density filter was adopted by pre-registered checks (RESULTS.md §6.1) and is now the pipeline default |
 
 This document has four parts:
 

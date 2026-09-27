@@ -1,5 +1,15 @@
 # HANDOFF — hdcompass v0.1.0 (2026-09-26)
 
+> **Update 2 (2026-09-27, later):**
+> - Pushed to `github.com/SatvikSaluja/hdCompass`; CI is green on 3.11 and 3.12.
+> - Parallel shuffle null.
+> - Pre-registered decisions (`scripts/validate.py decisions`, RESULTS.md §6): the density
+>   filter (k=15, keep=0.5) is adopted as the ring-test default; the decoder rate floor stays at
+>   1 Hz.
+> - DANDI:000939 loader (`load_dandi000939`, streamed and cached) and
+>   `scripts/run_dandi000939.py` (22 sessions, analysis plan fixed in advance).
+> - Still waiting on you: CRCNS th-1 files (see RESULTS.md §8 for what's needed).
+>
 > **Update 2026-09-27:** the full runs and validation are done. See `RESULTS.md` for the results
 > and `CODE_REVIEW.md` for the review and system walkthrough. What changed since the first
 > handoff:
