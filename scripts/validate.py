@@ -5,6 +5,7 @@ Usage:
   .venv/bin/python scripts/validate.py real      [--out results/validation]
   .venv/bin/python scripts/validate.py sweep     [--out results/validation]
   .venv/bin/python scripts/validate.py topology  [--out results/validation]
+  .venv/bin/python scripts/validate.py decisions [--out results/validation] [--jobs 8]
 
 synthetic  Mouse32-shaped session (wake 2000 s, REM 2500 s, SWS 12000 s, 20 cells) with known
            per-state sigma, jumps and SWS gain drop, run through the full label-free pipeline;
@@ -15,6 +16,9 @@ real       Mouse32: held-out 2-fold wake validation (60 s alternating blocks), g
            sleep decoding, held-out posterior coverage, sigma grid-edge flags, embedding
            robustness across Isomap neighbourhoods and seeds.
 sweep      Summary table and trend checks for results/sweep/report.json.
+decisions  Pre-registered checks that decide two pipeline defaults (rules fixed before running,
+           see DECISION_RULES): whether the ring test uses the density filter, and the rate floor
+           for the decoder's units.
 topology   Exploratory: why the H1 ring test fails on the full Mouse32 wake (19.5k points)
            but passes on 600 s synthetic sessions. Compares the as-run detector with three
            point-cloud variants, each with its own matched shuffle null, on real wake and on a
@@ -36,10 +40,10 @@ from hdcompass.circular import TWO_PI, circ_mae, epoch_diffs, wrap
 from hdcompass.cli import first_seconds, run_pipeline
 from hdcompass.datasets import load_mouse32
 from hdcompass.decode import SIGMA_GRID, _counts, decode, fit_sigma, forward_backward
-from hdcompass.features import population_rates
+from hdcompass.features import population_rates, units_above
 from hdcompass.manifold import embed, ring_angle
 from hdcompass.synth import STATE_PARAMS, simulate_hd, simulate_session, tuning_curves
-from hdcompass.topology import is_ring, ring_score
+from hdcompass.topology import density_filter, is_ring, ring_score, shuffle_null
 from hdcompass.tuning import fit_tuning, tuning_from_ring
 
 LEVEL = 0.9
@@ -375,13 +379,10 @@ def run_sweep_summary(out):
 
 
 def _density_filter(X, keep=0.5, k=15):
-    """PCA-10, then keep the ``keep`` fraction of points with the smallest k-NN distance."""
+    """PCA-10, then the library density filter (as h1_persistence applies it)."""
     from sklearn.decomposition import PCA
-    from sklearn.neighbors import NearestNeighbors
 
-    Y = PCA(min(10, X.shape[1]), random_state=0).fit_transform(X)
-    d = NearestNeighbors(n_neighbors=k + 1).fit(Y).kneighbors(Y)[0][:, -1]
-    return Y[d <= np.quantile(d, keep)]
+    return density_filter(PCA(min(10, X.shape[1]), random_state=0).fit_transform(X), keep, k)
 
 
 def _variants(rates):
@@ -433,11 +434,182 @@ def run_topology(out, n_shuffles=10):
     return rep
 
 
+# --------------------------------------------------------------------------- decisions
+
+DENSITY_GRID = [(k, keep) for k in (10, 15, 30) for keep in (0.3, 0.5, 0.7)]
+FROZEN_DENSITY = {"density_k": 15, "density_keep": 0.5}  # the setting tried first, not the best
+DECODE_FLOORS = (1.0, 0.3, 0.1)
+DECISION_RULES = {
+    "density_filter": (
+        "Adopt density_k=15, density_keep=0.5 as the ring-test default iff (a) real Mouse32 wake "
+        "is a ring in >= 7/9 grid settings, (b) the synthetic ring is detected in 9/9, (c) the "
+        "no-shared-angle control is detected in <= 1/9 (each test has a ~5% false-positive "
+        "rate), and (d) the 200-shuffle p-value at the frozen setting is < 0.05/4 (four "
+        "variants were tried in the exploratory topology run). Otherwise keep no filter."
+    ),
+    "decode_min_rate": (
+        "Among floors 1.0, 0.3, 0.1 Hz pick the lowest mean held-out (2-fold, 60 s blocks) MAE "
+        "of the label-free HMM; keep 1.0 Hz unless another floor beats it by more than 0.005 rad."
+    ),
+}
+
+
+def _independent_cells(pref, duration, seed):
+    """Ring-like tuning, but every cell follows its own latent angle: no shared ring."""
+    units = {}
+    for i, ph in enumerate(pref):
+        sp, _ = simulate_hd(1, duration, seed=seed * 1000 + i, pref_angle=[ph])
+        units[i] = sp[0]
+    return nap.TsGroup(units, time_support=nap.IntervalSet(0.0, duration))
+
+
+def _contaminated(kind, frac=0.3, n_cells=20, duration=2000.0, block=2.0, seed=0):
+    """A ring population whose activity is replaced by off-ring states in ``frac`` of 2 s blocks.
+
+    ``kind="silent"``: all cells at baseline rate (population quiet, maps near the ring centre);
+    ``kind="independent"``: each cell follows its own angle (scattered states).
+    """
+    ring, _ = simulate_hd(n_cells, duration, seed=seed)
+    pref = ring["pref_angle"].values
+    if kind == "silent":
+        off, _ = simulate_hd(n_cells, duration, peak_rate=0.5, seed=seed + 1, pref_angle=pref)
+    else:
+        off = _independent_cells(pref, duration, seed + 1)
+    rng = np.random.default_rng(seed)
+    starts = np.flatnonzero(rng.random(int(duration / block)) < frac) * block
+    bad = nap.IntervalSet(starts, starts + block)
+    good = nap.IntervalSet(0.0, duration).set_diff(bad)
+    units = {
+        k: nap.Ts(np.sort(np.concatenate([ring[k].restrict(good).t, off[k].restrict(bad).t])))
+        for k in range(n_cells)
+    }
+    return nap.TsGroup(units, time_support=nap.IntervalSet(0.0, duration))
+
+
+def _ring_test(rates, kw, n_shuffles, n_jobs):
+    score = ring_score(rates, **kw)
+    null = shuffle_null(rates, n_shuffles, n_jobs=n_jobs, **kw)
+    ring, p = is_ring(score, null)
+    return {"ring_score": score, "null_max": float(null.max()), "p": p, "is_ring": ring}
+
+
+def _grid(name, rates, n_jobs, n_shuffles=20):
+    rows = [{"density_k": None, "density_keep": None, **_ring_test(rates, {}, n_shuffles, n_jobs)}]
+    for k, keep in DENSITY_GRID:
+        kw = {"density_k": k, "density_keep": keep}
+        rows.append({**kw, **_ring_test(rates, kw, n_shuffles, n_jobs)})
+        print(f"[decisions] {name} k={k} keep={keep}: {rows[-1]}", flush=True)
+    return rows
+
+
+def _floor_cv(s, ring, floor):
+    spikes = s.spikes[units_above(s.spikes, s.wake, floor)]
+    a, b = blocks(s.wake)
+    folds = []
+    for train, test in ((a, b), (b, a)):
+        tc = tuning_from_ring(spikes, ring, train)
+        sig, _ = fit_sigma(spikes, tc, train)
+        _, tf = align(decode(spikes, tc, train, sigma=sig).angle, s.angle)
+        test_dec = apply_tf(decode(spikes, tc, test, sigma=sig).angle, tf)
+        tc_h = fit_tuning(spikes, s.angle, train)
+        sig_h, _ = fit_sigma(spikes, tc_h, train)
+        folds.append(
+            {
+                "hmm_ring_tuning_mae_rad": angle_error(test_dec, s.angle),
+                "hmm_head_tuning_mae_rad": angle_error(
+                    decode(spikes, tc_h, test, sigma=sig_h).angle, s.angle
+                ),
+            }
+        )
+    row = {k: float(np.mean([f[k] for f in folds])) for k in folds[0]}
+    return {"floor_hz": floor, "n_units": len(spikes), **row}
+
+
+def run_decisions(out, n_jobs):
+    t0 = time.perf_counter()
+    s = load_mouse32()
+    real = population_rates(s.spikes, s.wake)
+    sp, _ = simulate_hd(20, 2000, kappa=4.0, seed=0)
+    synth = population_rates(sp, sp.time_support)
+    null_cells = _independent_cells(sp["pref_angle"].values, 2000.0, seed=7)
+    control = population_rates(null_cells, null_cells.time_support)
+    rep = {"rules": DECISION_RULES, "grid": {}}
+    for name, rates in (
+        ("real_wake", real),
+        ("synthetic_ring", synth),
+        ("no_ring_control", control),
+    ):
+        rep["grid"][name] = _grid(name, rates, n_jobs)
+
+    # mechanism: does off-ring contamination defeat the as-specified test, and does the filter help?
+    rep["contamination"] = {}
+    for kind in ("silent", "independent"):
+        g = _contaminated(kind)
+        rates = population_rates(g, g.time_support)
+        rep["contamination"][kind] = {
+            "as_specified": _ring_test(rates, {}, 20, n_jobs),
+            "density_15_0.5": _ring_test(rates, FROZEN_DENSITY, 20, n_jobs),
+        }
+        print(f"[decisions] contamination {kind}: {rep['contamination'][kind]}", flush=True)
+
+    # which real bins does the filter drop? (head angle used for diagnosis only)
+    from sklearn.decomposition import PCA
+    from sklearn.neighbors import NearestNeighbors
+
+    Y = PCA(10, random_state=0).fit_transform(np.asarray(real))
+    d = NearestNeighbors(n_neighbors=16).fit(Y).kneighbors(Y)[0][:, -1]
+    dropped = d > np.quantile(d, 0.5)
+    pop = np.asarray(real).mean(axis=1)
+    speed = np.abs(np.gradient(np.unwrap(values_at(real.t, s.angle)), real.t))
+    rep["dropped_vs_kept_real"] = {
+        "mean_population_z_kept": float(pop[~dropped].mean()),
+        "mean_population_z_dropped": float(pop[dropped].mean()),
+        "median_head_speed_kept_rad_s": float(np.median(speed[~dropped])),
+        "median_head_speed_dropped_rad_s": float(np.median(speed[dropped])),
+    }
+    print(f"[decisions] dropped vs kept: {rep['dropped_vs_kept_real']}", flush=True)
+
+    # 200-shuffle test at the frozen setting
+    rep["real_200_shuffles"] = _ring_test(real, FROZEN_DENSITY, 200, n_jobs)
+    print(f"[decisions] 200 shuffles: {rep['real_200_shuffles']}", flush=True)
+
+    # decoder rate floor, held-out
+    ring = ring_angle(embed(real))
+    rep["decode_floor_cv"] = [_floor_cv(s, ring, f) for f in DECODE_FLOORS]
+    for r in rep["decode_floor_cv"]:
+        print(f"[decisions] floor {r}", flush=True)
+
+    # apply the rules
+    g = rep["grid"]
+    n_ring = {k: sum(r["is_ring"] for r in v[1:]) for k, v in g.items()}
+    density_ok = (
+        n_ring["real_wake"] >= 7
+        and n_ring["synthetic_ring"] == 9
+        and n_ring["no_ring_control"] <= 1
+        and rep["real_200_shuffles"]["p"] < 0.05 / 4
+    )
+    cv = rep["decode_floor_cv"]
+    best = min(cv, key=lambda r: r["hmm_ring_tuning_mae_rad"])
+    base = cv[0]["hmm_ring_tuning_mae_rad"]
+    floor = best["floor_hz"] if best["hmm_ring_tuning_mae_rad"] < base - 0.005 else 1.0
+    rep["verdict"] = {
+        "grid_detections_out_of_9": n_ring,
+        "adopt_density_filter": bool(density_ok),
+        "density_default": FROZEN_DENSITY if density_ok else None,
+        "decode_min_rate_default": floor,
+    }
+    rep["runtime_s"] = time.perf_counter() - t0
+    print(f"[decisions] VERDICT {rep['verdict']}", flush=True)
+    save_json(rep, out / "decisions.json", overwrite=True)
+    return rep
+
+
 def main():
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    p.add_argument("what", choices=["synthetic", "real", "sweep", "topology"])
+    p.add_argument("what", choices=["synthetic", "real", "sweep", "topology", "decisions"])
+    p.add_argument("--jobs", type=int, default=8)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", default="results/validation")
     a = p.parse_args()
@@ -448,6 +620,7 @@ def main():
         "real": lambda: run_real(out),
         "sweep": lambda: run_sweep_summary(out),
         "topology": lambda: run_topology(out),
+        "decisions": lambda: run_decisions(out, a.jobs),
     }[a.what]()
 
 

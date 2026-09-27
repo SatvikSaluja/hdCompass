@@ -126,7 +126,7 @@ def run_pipeline(
 
     report = {
         "quick": quick,
-        "n_adn_units": len(s.spikes),
+        "n_units_total": len(s.spikes),
         "n_units_used": len(rates.columns),
         "n_units_decode": len(spikes),
         "settings": {

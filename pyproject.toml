@@ -21,6 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
+dandi = ["remfile"]
 
 [project.scripts]
 hdcompass = "hdcompass.cli:main"
