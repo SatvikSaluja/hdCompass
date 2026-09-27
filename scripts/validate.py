@@ -4,6 +4,7 @@ Usage:
   .venv/bin/python scripts/validate.py synthetic [--seed 0] [--out results/validation]
   .venv/bin/python scripts/validate.py real      [--out results/validation]
   .venv/bin/python scripts/validate.py sweep     [--out results/validation]
+  .venv/bin/python scripts/validate.py topology  [--out results/validation]
 
 synthetic  Mouse32-shaped session (wake 2000 s, REM 2500 s, SWS 12000 s, 20 cells) with known
            per-state sigma, jumps and SWS gain drop, run through the full label-free pipeline;
@@ -14,6 +15,10 @@ real       Mouse32: held-out 2-fold wake validation (60 s alternating blocks), g
            sleep decoding, held-out posterior coverage, sigma grid-edge flags, embedding
            robustness across Isomap neighbourhoods and seeds.
 sweep      Summary table and trend checks for results/sweep/report.json.
+topology   Exploratory: why the H1 ring test fails on the full Mouse32 wake (19.5k points)
+           but passes on 600 s synthetic sessions. Compares the as-run detector with three
+           point-cloud variants, each with its own matched shuffle null, on real wake and on a
+           2000 s synthetic wake (ground truth: ring). Not part of the pre-specified pipeline.
 """
 
 import argparse
@@ -28,12 +33,13 @@ from matplotlib.figure import Figure
 from hdcompass.align import align, angle_error
 from hdcompass.benchmark import save_json
 from hdcompass.circular import TWO_PI, circ_mae, epoch_diffs, wrap
-from hdcompass.cli import run_pipeline
+from hdcompass.cli import first_seconds, run_pipeline
 from hdcompass.datasets import load_mouse32
 from hdcompass.decode import SIGMA_GRID, _counts, decode, fit_sigma, forward_backward
 from hdcompass.features import population_rates
 from hdcompass.manifold import embed, ring_angle
-from hdcompass.synth import STATE_PARAMS, simulate_session, tuning_curves
+from hdcompass.synth import STATE_PARAMS, simulate_hd, simulate_session, tuning_curves
+from hdcompass.topology import is_ring, ring_score
 from hdcompass.tuning import fit_tuning, tuning_from_ring
 
 LEVEL = 0.9
@@ -365,11 +371,73 @@ def run_sweep_summary(out):
     return out_rep
 
 
+# --------------------------------------------------------------------------- topology
+
+
+def _density_filter(X, keep=0.5, k=15):
+    """PCA-10, then keep the ``keep`` fraction of points with the smallest k-NN distance."""
+    from sklearn.decomposition import PCA
+    from sklearn.neighbors import NearestNeighbors
+
+    Y = PCA(min(10, X.shape[1]), random_state=0).fit_transform(X)
+    d = NearestNeighbors(n_neighbors=k + 1).fit(Y).kneighbors(Y)[0][:, -1]
+    return Y[d <= np.quantile(d, keep)]
+
+
+def _variants(rates):
+    """name -> function(time x units array) -> point cloud. Applied identically to shuffles."""
+    X = np.asarray(rates, dtype=float)
+    n600 = len(rates.restrict(first_seconds(rates.time_support, 600.0)))
+    idx = np.sort(np.random.default_rng(0).choice(len(X), min(6000, len(X)), replace=False))
+    return {
+        "as_run_fps800": lambda A: A,
+        "first_600s": lambda A: A[:n600],
+        "random_6000": lambda A: A[idx],
+        "density_top50": _density_filter,
+    }
+
+
+def _topology_table(rates, n_shuffles, seed=0):
+    X = np.asarray(rates, dtype=float)
+    rng = np.random.default_rng(seed)
+    shuffles = [rng.integers(len(X), size=X.shape[1]) for _ in range(n_shuffles)]
+    rows = {}
+    for name, prep in _variants(rates).items():
+        score = ring_score(prep(X))
+        null = np.array(
+            [
+                ring_score(prep(np.stack([np.roll(X[:, j], sh) for j, sh in enumerate(shs)], 1)))
+                for shs in shuffles
+            ]
+        )
+        ring, p = is_ring(score, null)
+        rows[name] = {"ring_score": score, "null_max": float(null.max()), "p": p, "is_ring": ring}
+        print(f"[topology] {name}: {rows[name]}", flush=True)
+    return rows
+
+
+def run_topology(out, n_shuffles=10):
+    s = load_mouse32()
+    real = population_rates(s.spikes, s.wake)
+    spikes, _ = simulate_hd(20, 2000, kappa=4.0, seed=0)
+    synth = population_rates(spikes, spikes.time_support)
+    rep = {
+        "n_shuffles": n_shuffles,
+        "real_wake": {"n_points": len(real), **_topology_table(real, n_shuffles)},
+        "synthetic_wake_2000s_20cells": {
+            "n_points": len(synth),
+            **_topology_table(synth, n_shuffles),
+        },
+    }
+    save_json(rep, out / "topology.json", overwrite=True)
+    return rep
+
+
 def main():
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    p.add_argument("what", choices=["synthetic", "real", "sweep"])
+    p.add_argument("what", choices=["synthetic", "real", "sweep", "topology"])
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", default="results/validation")
     a = p.parse_args()
@@ -379,6 +447,7 @@ def main():
         "synthetic": lambda: run_synthetic(out, a.seed),
         "real": lambda: run_real(out),
         "sweep": lambda: run_sweep_summary(out),
+        "topology": lambda: run_topology(out),
     }[a.what]()
 
 

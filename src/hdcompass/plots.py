@@ -99,8 +99,9 @@ def plot_sweep(results):
                 capsize=3,
             )
         ax.set(xscale="log", xlabel="cells", title=title)
-        ax.set_xticks(sorted({r["n_cells"] for r in results}))
-        ax.set_xticklabels(sorted({r["n_cells"] for r in results}))
+        ns = sorted({r["n_cells"] for r in results})
+        ax.minorticks_off()
+        ax.set_xticks(ns, [str(n) for n in ns])
     axes[0].set_ylabel("circular MAE (rad)")
     axes[0].legend(fontsize=8)
     fig.tight_layout()
