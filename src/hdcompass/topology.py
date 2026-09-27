@@ -8,6 +8,12 @@ from ripser import ripser
 from sklearn.decomposition import PCA
 from sklearn.neighbors import NearestNeighbors
 
+# Ring-test density filter frozen for the pipelines by the pre-registered checks in
+# `scripts/validate.py decisions` (results/validation/decisions.json): real Mouse32 wake is a
+# ring in 8/9 (k, keep) settings, a synthetic ring in 9/9, a no-ring control in 1/9, and the
+# 200-shuffle p-value at this setting is 1/201. The functions below stay unfiltered by default.
+FROZEN_DENSITY = {"density_keep": 0.5, "density_k": 15}
+
 
 def density_filter(X, keep, k=15):
     """Keep the ``keep`` fraction of points with the smallest distance to their k-th neighbour.

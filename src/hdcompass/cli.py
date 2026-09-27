@@ -15,7 +15,7 @@ from .dynamics import state_dynamics
 from .features import population_rates, units_above
 from .manifold import embed, ring_angle
 from .plots import plot_barcode, plot_decode, plot_ring, plot_state_dynamics, plot_sweep
-from .topology import h1_persistence, is_ring, shuffle_null
+from .topology import FROZEN_DENSITY, h1_persistence, is_ring, shuffle_null
 from .tuning import fit_tuning, tuning_from_ring
 
 QUICK_SECONDS = 120.0
@@ -52,8 +52,8 @@ def run_pipeline(
     out,
     quick=False,
     overwrite=False,
-    density_keep=None,
-    density_k=15,
+    density_keep=FROZEN_DENSITY["density_keep"],
+    density_k=FROZEN_DENSITY["density_k"],
     decode_min_rate=None,
     n_jobs=1,
 ):
@@ -72,11 +72,12 @@ def run_pipeline(
     overwrite : bool
     density_keep, density_k
         Density filter for the ring test (:func:`~hdcompass.topology.h1_persistence`); None
-        disables it.
+        disables it. Defaults are the frozen ``topology.FROZEN_DENSITY``.
     decode_min_rate : float, optional
         Rate floor (Hz, on wake) for the units used by the tuning curves and decoders. None uses
         the embedding's units (``population_rates`` floor, 1 Hz). The embedding keeps its own
-        floor because z-scoring gives every unit equal weight there.
+        floor because z-scoring gives every unit equal weight there. The pre-registered check
+        found no held-out gain from lowering it (Mouse32: 0.406 rad at 1, 0.3 and 0.1 Hz).
     n_jobs : int
         Worker processes for the shuffle null.
 

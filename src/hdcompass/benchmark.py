@@ -13,7 +13,7 @@ from .decode import SIGMA_GRID, decode
 from .features import population_rates
 from .manifold import embed, ring_angle
 from .synth import simulate_hd, tuning_curves
-from .topology import h1_persistence, is_ring, shuffle_null
+from .topology import FROZEN_DENSITY, h1_persistence, is_ring, shuffle_null
 
 
 def jsonable(x):
@@ -52,6 +52,7 @@ def recovery_sweep(
     n_landmarks=800,
     sigma_grid=SIGMA_GRID,
     n_jobs=1,
+    density=FROZEN_DENSITY,
 ):
     """Run synth → features → topology → manifold → align, plus the HMM with true tuning.
 
@@ -73,6 +74,8 @@ def recovery_sweep(
         Grid for the decoder's maximum-likelihood ``sigma``.
     n_jobs : int
         Worker processes for the shuffle null (does not change results).
+    density : dict or None
+        ``density_keep``/``density_k`` for the ring test; None disables the filter.
 
     Returns
     -------
@@ -91,6 +94,7 @@ def recovery_sweep(
         "n_shuffles": n_shuffles,
         "n_landmarks": n_landmarks,
         "sigma_grid": [float(s) for s in sigma_grid],
+        "density": density,
     }
     config_hash = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:12]
     if out_path is not None and Path(out_path).exists() and not overwrite:
@@ -104,9 +108,16 @@ def recovery_sweep(
                 spikes, angle = simulate_hd(n, duration, kappa=kappa, seed=seed)
                 rates = population_rates(spikes, spikes.time_support)
                 null = shuffle_null(
-                    rates, n_shuffles, seed=seed, n_landmarks=n_landmarks, n_jobs=n_jobs
+                    rates,
+                    n_shuffles,
+                    seed=seed,
+                    n_landmarks=n_landmarks,
+                    n_jobs=n_jobs,
+                    **(density or {}),
                 )
-                score = h1_persistence(rates, n_landmarks, seed=seed)["ring_score"]
+                score = h1_persistence(rates, n_landmarks, seed=seed, **(density or {}))[
+                    "ring_score"
+                ]
                 ring, p = is_ring(score, null)
                 recovered = ring_angle(embed(rates, seed=seed))
                 aligned, _ = align(recovered, angle)
