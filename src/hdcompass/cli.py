@@ -8,7 +8,7 @@ import numpy as np
 import pynapple as nap
 
 from .align import align, angle_error
-from .benchmark import recovery_sweep, save_json
+from .benchmark import jsonable, recovery_sweep, save_json
 from .datasets import load_mouse32
 from .decode import SIGMA_GRID, decode
 from .dynamics import state_dynamics
@@ -84,6 +84,7 @@ def run_pipeline(
     Returns
     -------
     report : dict
+        As saved to ``report.json`` (plain Python types; non-finite floats are None).
     figs : dict[str, Figure]
     details : dict
         In-memory intermediates for further validation: ``spikes`` (decoder units), ``rates``,
@@ -167,6 +168,7 @@ def run_pipeline(
         ),
         "dynamics": plot_state_dynamics(dyn),
     }
+    report = jsonable(report)  # return exactly what is saved (plain Python, no NaN/inf)
     out.mkdir(parents=True, exist_ok=True)
     _save_figs(figs, out)
     save_json(report, out / "report.json", overwrite)
@@ -212,7 +214,7 @@ def main(argv=None):
     if args.command == "mouse32":
         report, _ = run_mouse32(args.out, args.quick, args.data, args.overwrite, args.jobs)
         topo = report["topology"]
-        print(f"ring_score={topo['ring_score']:.2f} is_ring={topo['is_ring']}")
+        print(f"ring_score={topo['ring_score']} is_ring={topo['is_ring']}")
     else:
         results, _ = run_sweep(args.out, args.quick, args.overwrite, args.jobs)
         print(f"{len(results)} configurations")

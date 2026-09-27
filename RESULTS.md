@@ -213,6 +213,11 @@ the ring. On real data, though, the dropped bins are **not** quiet periods. Thei
 z-score is +0.09 (kept: −0.09) and the head speed is similar (0.55 vs 0.49 rad/s). They are
 sparse, slightly more active states, and what they are physiologically is open.
 
+**Caveat found afterwards:** on the 120 s `--quick` slice (1,196 points) the frozen filter
+*misses* the ring (1.03, null max 1.46), where the unfiltered test found it (3.64). The filter
+was validated only at full length (~20,000 points). Halving an already small point cloud leaves
+the ring too sparse, so `--quick` topology is a smoke test only.
+
 **Frozen Mouse32 rerun** (`results/mouse32_frozen/`, 3 min 11 s with 8 processes): ring score
 4.92 against a null maximum of 1.48, so a ring. Every other number is identical to §3, since
 only the topology step changed.

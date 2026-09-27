@@ -57,7 +57,8 @@ OSF (~37 MB) into `~/.cache/hdcompass/` on first use, or pass `--data PATH`.
 ```
 
 Each writes `report.json` and PNG figures. Existing reports are never overwritten unless you
-pass `--overwrite`.
+pass `--overwrite`. The quick ring test is not meaningful: the density filter needs a full-length
+recording (RESULTS.md §6.1).
 
 ## Full runs
 

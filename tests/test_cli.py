@@ -41,3 +41,12 @@ def test_pipeline_skips_a_missing_sleep_state(tmp_path):
     no_rem = Session(s.spikes, s.angle, s.wake, nap.IntervalSet(start=[], end=[]), s.sws)
     report, _, _ = run_pipeline(no_rem, tmp_path, quick=True)
     assert report["skipped_states"] == ["rem"] and set(report["dynamics"]) == {"wake", "sws"}
+
+
+def test_returned_report_is_what_is_saved(tmp_path):
+    from hdcompass.cli import run_pipeline
+    from hdcompass.synth import simulate_session
+
+    s, _ = simulate_session(n_cells=12, wake=130, rem=40, sws=60, rem_epoch=40, sws_epoch=60)
+    report, _, _ = run_pipeline(s, tmp_path, quick=True)
+    assert json.loads(json.dumps(report)) == json.loads((tmp_path / "report.json").read_text())
