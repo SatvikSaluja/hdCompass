@@ -28,3 +28,16 @@ def test_pipeline_on_synthetic_session(tmp_path):
     for name in ("ring", "barcode", "decode_wake", "dynamics"):
         assert (tmp_path / f"{name}.png").exists()
     json.loads((tmp_path / "report.json").read_text())
+
+
+def test_pipeline_skips_a_missing_sleep_state(tmp_path):
+    import pynapple as nap
+
+    from hdcompass.cli import run_pipeline
+    from hdcompass.datasets import Session
+    from hdcompass.synth import simulate_session
+
+    s, _ = simulate_session(n_cells=16, wake=150, rem=60, sws=120, rem_epoch=30, sws_epoch=60)
+    no_rem = Session(s.spikes, s.angle, s.wake, nap.IntervalSet(start=[], end=[]), s.sws)
+    report, _, _ = run_pipeline(no_rem, tmp_path, quick=True)
+    assert report["skipped_states"] == ["rem"] and set(report["dynamics"]) == {"wake", "sws"}

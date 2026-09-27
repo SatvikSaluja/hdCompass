@@ -54,11 +54,11 @@ def summarize(name, s, report):
         "hmm_ring_tuning_mae_rad": val["hmm_ring_tuning_mae_rad"],
         "independent_ring_tuning_mae_rad": val["independent_ring_tuning_mae_rad"],
         "hmm_head_tuning_mae_rad": val["hmm_head_tuning_mae_rad"],
-        "rem_ok": report["durations_s"]["rem"] >= MIN_REM_S,
+        "rem_ok": report["durations_s"].get("rem", 0.0) >= MIN_REM_S,
     }
     for st in STATES:
         for k in ("sigma", "mean_circ_variance", "jump_fraction", "median_abs_speed"):
-            row[f"{k}_{st}"] = dyn[st][k]
+            row[f"{k}_{st}"] = dyn[st][k] if st in dyn else float("nan")
     return row
 
 

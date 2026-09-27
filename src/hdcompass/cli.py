@@ -95,6 +95,8 @@ def run_pipeline(
     states = {"wake": s.wake, "rem": s.rem, "sws": s.sws}
     if quick:
         states = {k: first_seconds(v, QUICK_SECONDS) for k, v in states.items()}
+    skipped = [k for k, v in states.items() if k != "wake" and v.tot_length() < 1.0]
+    states = {k: v for k, v in states.items() if k not in skipped}  # e.g. a session without REM
     n_shuffles = 5 if quick else 20
     sigma_grid = np.geomspace(0.1, 50.0, 4) if quick else SIGMA_GRID
 
@@ -135,6 +137,7 @@ def run_pipeline(
             "decode_min_rate": decode_min_rate,
         },
         "durations_s": {k: float(ep.tot_length()) for k, ep in states.items()},
+        "skipped_states": skipped,
         "topology": {
             "ring_score": h1["ring_score"],
             "null": null,
