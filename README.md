@@ -62,16 +62,29 @@ pass `--overwrite`.
 ## Full runs
 
 ```bash
-.venv/bin/python scripts/run_mouse32.py          # → results/mouse32/
-.venv/bin/python scripts/run_synthetic_sweep.py  # → results/sweep/ (4 sizes × 3 κ × 3 seeds)
+.venv/bin/python scripts/run_mouse32.py          # → results/mouse32/ (~12 min)
+.venv/bin/python scripts/run_synthetic_sweep.py  # → results/sweep/ (4 sizes × 3 κ × 3 seeds, ~1 h)
+.venv/bin/python scripts/validate.py real|synthetic|topology|sweep   # → results/validation/
 ```
 
 `notebooks/figures.py` (jupytext percent format) regenerates all figures.
 
 ## Results
 
-Not yet run. The full Mouse32 pipeline and the synthetic sweep have not been executed; only
-the `--quick` smoke runs above have.
+Full runs and validation completed 2026-09-27. Details, tables and caveats are in
+[RESULTS.md](RESULTS.md). Headlines (Mouse32, 19 ADn units):
+
+- **Label-free recovery works.** The unsupervised ring angle tracks head direction with a
+  held-out error of 0.42 rad. The fully label-free HMM decoder reaches 0.41 rad, against 0.58
+  for independent bins and 0.21 for a decoder trained on tracked head angle.
+- **Compass dynamics by state:** σ = 0.54 (wake), 0.96 (REM), 2.97 (SWS) rad/√s. SWS is also
+  about 10× less certain than wake. A uniform firing-rate gain drop doesn't explain this.
+- **The pre-specified H1 ring test is negative on the full wake** (score 1.04, p = 0.48). An
+  exploratory density-filtered variant detects the ring strongly (4.92 vs null max 1.48).
+- **Validated on ground truth.** Over 17,000 s Mouse32-shaped simulations (2 seeds), the
+  label-free pipeline is within 0.012 rad of an oracle decoder in every state and recovers σ to
+  the nearest grid point in wake and REM. It undercounts SWS jumps about 20×.
+- **Real-data posteriors are overconfident:** 90% intervals cover 64% (synthetic: 90–92%).
 
 ## Limitations
 

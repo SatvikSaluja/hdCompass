@@ -1,5 +1,20 @@
 # HANDOFF — hdcompass v0.1.0 (2026-09-26)
 
+> **Update 2026-09-27:** the full runs and validation are done. See `RESULTS.md` for the results
+> and `CODE_REVIEW.md` for the review and system walkthrough. What changed since the first
+> handoff:
+> - fixed `is_ring` interpolation (R4);
+> - split out `run_pipeline(session, ...)` and added `simulate_session` (R5), with an end-to-end
+>   pipeline test;
+> - added `scripts/validate.py` (synthetic / real / topology / sweep);
+> - fixed the sweep-plot ticks.
+>
+> Tests: 25 pass in ~29 s. The open questions below are answered in `RESULTS.md`:
+> 1. A uniform gain doesn't explain the state differences (§3.5).
+> 2. ε = 0 undercounts SWS jumps about 20× (§4).
+> 3. 12/31 units are under 1 Hz over the whole wake.
+> 4. Real-data posteriors are overconfident, covering 64% vs 90% nominal (§3.4).
+
 ## What exists
 
 Everything in `PLAN.md` §2: the package (`src/hdcompass/`, 13 modules), 11 test files,
@@ -36,8 +51,8 @@ results. From `/tmp/hdc_m32/report.json` (120 s per state, 5 shuffles, 4-value �
 p = 1/6, the floor for 5 shuffles); wake MAE vs head angle: ring angle 0.34 rad, HMM with
 ring tuning 0.32 rad, independent-bin decoder 0.56 rad, HMM with head-angle tuning 0.21 rad.
 
-**Not executed:** full Mouse32 run, full synthetic sweep, `notebooks/figures.py`, the two
-scripts (syntax-checked only). README *Results* says "not yet run" on purpose.
+**Since executed (2026-09-27):** full Mouse32 run, full synthetic sweep, and all validation runs
+(see `RESULTS.md` §6 for commands, times and memory). `notebooks/figures.py` is still not run.
 
 ## Choices beyond or different from the plan
 
