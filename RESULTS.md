@@ -15,6 +15,7 @@ Angles are in radians. Chance-level MAE for a random angle is π/2 ≈ 1.57 rad.
 | Is the decoder's uncertainty trustworthy? | **On synthetic data yes** (90% intervals cover 90–92%). **On real data no**: they cover 64% | §3.4, §4 |
 | Is the SWS result an artifact of lower firing rates? | Not of a uniform gain change. Rescaling tuning leaves σ unchanged and fits worse | §3.5 |
 | Should low-rate units be decoded too? | **No gain.** Held-out error is 0.406 rad with 19, 24 or 28 units (1, 0.3, 0.1 Hz floors), so the 1 Hz floor stays | §6.2 |
+| Does the frozen ring test work on synthetic data? | **Yes:** 36 of 36 sweep configurations (the unfiltered test: 33/36) | §5 |
 | Does it generalise to another dataset and region? | **Decoding and the SWS result, yes.** Across 22 post-subiculum sessions (DANDI:000939) the label-free decoder reaches a median 0.36 rad. σ SWS > wake in 21/22 sessions (p = 1.8e-5), SWS > REM in 19/20, and SWS variance > wake in 21/22. REM ≈ wake there. The ring test finds a ring in only 12/22 | §7 |
 | Does the pipeline recover known ground truth over a full-length session? | **Yes** for ring, angle, wake/REM σ and error, over 17,000 s simulations and 2 seeds. Jumps are undercounted about 20× | §4 |
 
@@ -165,6 +166,10 @@ What this establishes:
   for κ = 8 between 32 and 64 cells (within 1 sd).
 - The fitted σ is within one grid step of the true 1.0 in all 36 runs.
 - Figure: `results/sweep/sweep.png`.
+- **Rerun with the frozen density filter** (§6; `results/sweep_frozen/`, config hash
+  `c3f139c596c9`, 18:59 with 8 processes): the ring is detected in **36 of 36** configurations,
+  including the three κ = 8, 8-cell misses (median score 5.4). Median scores rise to 5.4–25.6.
+  Decoding and ring-angle errors are identical, since only the ring test changed.
 
 ## 6. Pre-registered decisions: the frozen pipeline
 
@@ -334,6 +339,7 @@ Per-session results (`results/dandi000939/<session>/report.json`, `summary.json`
 .venv/bin/python scripts/validate.py decisions --jobs 8  # …/decisions.json        30:49, 2.1 GB
 .venv/bin/python scripts/run_mouse32.py --out results/mouse32_frozen   # frozen    3:11, 2.7 GB
 .venv/bin/python scripts/run_dandi000939.py --jobs 8     # results/dandi000939/   52:41, 4.0 GB
+.venv/bin/python scripts/run_synthetic_sweep.py --out results/sweep_frozen    # frozen 18:59, 1.3 GB
 ```
 
 \* The sweep and Mouse32 runs shared the machine with unrelated jobs (load average ~16 on 8
