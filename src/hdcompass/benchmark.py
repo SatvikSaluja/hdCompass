@@ -51,6 +51,7 @@ def recovery_sweep(
     n_shuffles=20,
     n_landmarks=800,
     sigma_grid=SIGMA_GRID,
+    n_jobs=1,
 ):
     """Run synth → features → topology → manifold → align, plus the HMM with true tuning.
 
@@ -70,6 +71,8 @@ def recovery_sweep(
         Topology settings.
     sigma_grid : array_like
         Grid for the decoder's maximum-likelihood ``sigma``.
+    n_jobs : int
+        Worker processes for the shuffle null (does not change results).
 
     Returns
     -------
@@ -100,7 +103,9 @@ def recovery_sweep(
                 t0 = time.perf_counter()
                 spikes, angle = simulate_hd(n, duration, kappa=kappa, seed=seed)
                 rates = population_rates(spikes, spikes.time_support)
-                null = shuffle_null(rates, n_shuffles, seed=seed, n_landmarks=n_landmarks)
+                null = shuffle_null(
+                    rates, n_shuffles, seed=seed, n_landmarks=n_landmarks, n_jobs=n_jobs
+                )
                 score = h1_persistence(rates, n_landmarks, seed=seed)["ring_score"]
                 ring, p = is_ring(score, null)
                 recovered = ring_angle(embed(rates, seed=seed))

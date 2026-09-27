@@ -35,6 +35,12 @@ def bin_counts(spikes, ep, bin_size):
     return out
 
 
+def units_above(spikes, ep, min_rate):
+    """Keys of units whose mean rate on ``ep`` is at least ``min_rate`` Hz."""
+    tot = ep.tot_length()
+    return [k for k in spikes.keys() if len(spikes[k].restrict(ep)) / tot >= min_rate]
+
+
 def population_rates(spikes, ep, bin_size=0.1, smooth_std=0.1, min_rate=1.0):
     """Z-scored, sqrt-transformed, smoothed population rates.
 
@@ -60,8 +66,7 @@ def population_rates(spikes, ep, bin_size=0.1, smooth_std=0.1, min_rate=1.0):
     nap.TsdFrame
         Bins × kept units (columns are unit ids); time support is the trimmed epochs.
     """
-    tot = ep.tot_length()
-    keep = [k for k in spikes.keys() if len(spikes[k].restrict(ep)) / tot >= min_rate]
+    keep = units_above(spikes, ep, min_rate)
     if not keep:
         raise ValueError(f"no unit reaches min_rate={min_rate} Hz on this epoch set")
     spikes = spikes[keep]

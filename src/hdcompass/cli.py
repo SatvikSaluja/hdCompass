@@ -1,6 +1,7 @@
 """Command line: ``hdcompass mouse32`` and ``hdcompass sweep``."""
 
 import argparse
+import os
 from pathlib import Path
 
 import numpy as np
@@ -11,7 +12,7 @@ from .benchmark import recovery_sweep, save_json
 from .datasets import load_mouse32
 from .decode import SIGMA_GRID, decode
 from .dynamics import state_dynamics
-from .features import population_rates
+from .features import population_rates, units_above
 from .manifold import embed, ring_angle
 from .plots import plot_barcode, plot_decode, plot_ring, plot_state_dynamics, plot_sweep
 from .topology import h1_persistence, is_ring, shuffle_null
@@ -38,27 +39,53 @@ def _save_figs(figs, out):
         fig.savefig(Path(out) / f"{name}.png", dpi=120)
 
 
-def run_mouse32(out, quick=False, data=None, overwrite=False):
+def run_mouse32(out, quick=False, data=None, overwrite=False, n_jobs=1):
     """:func:`run_pipeline` on Mouse32-140822. Returns ``(report, figs)``."""
     if (Path(out) / "report.json").exists() and not overwrite:
         raise FileExistsError(f"{Path(out) / 'report.json'} exists; use --overwrite")
-    report, figs, _ = run_pipeline(load_mouse32(data), out, quick, overwrite)
+    report, figs, _ = run_pipeline(load_mouse32(data), out, quick, overwrite, n_jobs=n_jobs)
     return report, figs
 
 
-def run_pipeline(s, out, quick=False, overwrite=False):
+def run_pipeline(
+    s,
+    out,
+    quick=False,
+    overwrite=False,
+    density_keep=None,
+    density_k=15,
+    decode_min_rate=None,
+    n_jobs=1,
+):
     """Full label-free pipeline on a :class:`~hdcompass.datasets.Session`.
 
     Writes ``report.json`` and PNGs to ``out``. ``s.angle`` (head angle) is used only to validate
     (alignment error) and to colour figures; the ring, tuning curves and decoders are built from
     spikes alone.
 
+    Parameters
+    ----------
+    s : Session
+    out : str or Path
+    quick : bool
+        120 s per state, 5 shuffles, 4-value sigma grid.
+    overwrite : bool
+    density_keep, density_k
+        Density filter for the ring test (:func:`~hdcompass.topology.h1_persistence`); None
+        disables it.
+    decode_min_rate : float, optional
+        Rate floor (Hz, on wake) for the units used by the tuning curves and decoders. None uses
+        the embedding's units (``population_rates`` floor, 1 Hz). The embedding keeps its own
+        floor because z-scoring gives every unit equal weight there.
+    n_jobs : int
+        Worker processes for the shuffle null.
+
     Returns
     -------
     report : dict
     figs : dict[str, Figure]
     details : dict
-        In-memory intermediates for further validation: ``spikes`` (units used), ``rates``,
+        In-memory intermediates for further validation: ``spikes`` (decoder units), ``rates``,
         ``ring_angle``, ``tuning_ring``, ``tuning_head``, ``results`` (DecodeResult per state),
         ``states`` (epochs analysed), ``sigma_grid``.
     """
@@ -72,10 +99,14 @@ def run_pipeline(s, out, quick=False, overwrite=False):
     sigma_grid = np.geomspace(0.1, 50.0, 4) if quick else SIGMA_GRID
 
     # 1. label-free ring: rates -> topology -> embedding -> ring angle
+    topo_kw = {"density_keep": density_keep, "density_k": density_k}
     rates = population_rates(s.spikes, states["wake"])
-    spikes = s.spikes[list(rates.columns)]
-    h1 = h1_persistence(rates)
-    null = shuffle_null(rates, n_shuffles)
+    if decode_min_rate is None:
+        spikes = s.spikes[list(rates.columns)]
+    else:
+        spikes = s.spikes[units_above(s.spikes, states["wake"], decode_min_rate)]
+    h1 = h1_persistence(rates, **topo_kw)
+    null = shuffle_null(rates, n_shuffles, n_jobs=n_jobs, **topo_kw)
     ring, p = is_ring(h1["ring_score"], null)
     emb = embed(rates)
     ring_ang = ring_angle(emb)
@@ -96,7 +127,13 @@ def run_pipeline(s, out, quick=False, overwrite=False):
     report = {
         "quick": quick,
         "n_adn_units": len(s.spikes),
-        "n_units_used": len(spikes),
+        "n_units_used": len(rates.columns),
+        "n_units_decode": len(spikes),
+        "settings": {
+            "density_keep": density_keep,
+            "density_k": density_k,
+            "decode_min_rate": decode_min_rate,
+        },
         "durations_s": {k: float(ep.tot_length()) for k, ep in states.items()},
         "topology": {
             "ring_score": h1["ring_score"],
@@ -142,10 +179,12 @@ def run_pipeline(s, out, quick=False, overwrite=False):
     return report, figs, details
 
 
-def run_sweep(out, quick=False, overwrite=False):
+def run_sweep(out, quick=False, overwrite=False, n_jobs=1):
     """Synthetic recovery sweep; writes ``report.json`` and ``sweep.png`` to ``out``."""
     out = Path(out)
-    results = recovery_sweep(quick=quick, out_path=out / "report.json", overwrite=overwrite)
+    results = recovery_sweep(
+        quick=quick, out_path=out / "report.json", overwrite=overwrite, n_jobs=n_jobs
+    )
     figs = {"sweep": plot_sweep(results)}
     _save_figs(figs, out)
     return results, figs
@@ -159,16 +198,19 @@ def main(argv=None):
         p.add_argument("--out", required=True, help="output directory")
         p.add_argument("--quick", action="store_true", help="small smoke-test run")
         p.add_argument("--overwrite", action="store_true", help="replace an existing report")
+        p.add_argument(
+            "--jobs", type=int, default=os.cpu_count(), help="processes for the shuffle null"
+        )
         if name == "mouse32":
             p.add_argument("--data", default=None, help="path to Mouse32-140822.nwb")
     args = parser.parse_args(argv)
 
     if args.command == "mouse32":
-        report, _ = run_mouse32(args.out, args.quick, args.data, args.overwrite)
+        report, _ = run_mouse32(args.out, args.quick, args.data, args.overwrite, args.jobs)
         topo = report["topology"]
         print(f"ring_score={topo['ring_score']:.2f} is_ring={topo['is_ring']}")
     else:
-        results, _ = run_sweep(args.out, args.quick, args.overwrite)
+        results, _ = run_sweep(args.out, args.quick, args.overwrite, args.jobs)
         print(f"{len(results)} configurations")
     print(f"wrote {Path(args.out) / 'report.json'}")
 

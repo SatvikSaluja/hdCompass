@@ -30,3 +30,22 @@ def test_is_ring_needs_to_beat_every_shuffle_when_few():
     null = [1.0, 1.0, 1.0, 1.4, 1.6]
     assert is_ring(1.58, null) == (False, 2 / 6)
     assert is_ring(1.61, null)[0]
+
+
+def test_parallel_null_matches_serial_and_density_filter():
+    from hdcompass.topology import density_filter
+
+    th = _walk(600, 2)
+    X = np.column_stack(
+        [np.cos(th), np.sin(th), 0.05 * np.random.default_rng(3).standard_normal(600)]
+    )
+    serial = shuffle_null(X, n_shuffles=3, n_landmarks=150)
+    parallel = shuffle_null(X, n_shuffles=3, n_landmarks=150, n_jobs=2)
+    np.testing.assert_array_equal(serial, parallel)
+    # density filter keeps the requested fraction and drops scattered off-ring points
+    rng = np.random.default_rng(4)
+    ring = np.column_stack([np.cos(th), np.sin(th)]) + 0.02 * rng.standard_normal((600, 2))
+    noise = rng.uniform(-0.6, 0.6, (60, 2))  # sparse points inside the hole
+    kept = density_filter(np.vstack([ring, noise]), keep=0.8)
+    assert len(kept) == int(np.ceil(0.8 * 660)) or abs(len(kept) - 0.8 * 660) <= 1
+    assert np.mean(np.linalg.norm(kept, axis=1) < 0.7) < 0.02
