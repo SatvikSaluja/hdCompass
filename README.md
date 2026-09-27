@@ -46,7 +46,7 @@ python3 -m venv .venv
 .venv/bin/pip install -e '.[dev]'          # or add -c constraints.txt for the pinned set
 ```
 
-Python ≥ 3.10, CPU only. Data: `Mouse32-140822.nwb` (Peyrache et al. 2015) is downloaded from
+Python ≥ 3.11, CPU only. Data: `Mouse32-140822.nwb` (Peyrache et al. 2015) is downloaded from
 OSF (~37 MB) into `~/.cache/hdcompass/` on first use, or pass `--data PATH`.
 
 ## Quick smoke runs
