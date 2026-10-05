@@ -5,3 +5,9 @@ __pycache__/
 .ruff_cache/
 results/
 figures/
+
+# Published results snapshot for GitHub Pages.
+!docs/results/
+!docs/results/**
+!docs/figures/
+!docs/figures/**

@@ -1,0 +1,41 @@
+{
+  "config": {
+    "n_cells": [
+      32
+    ],
+    "kappas": [
+      4
+    ],
+    "duration": 60,
+    "seeds": [
+      0
+    ],
+    "n_shuffles": 5,
+    "n_landmarks": 800,
+    "sigma_grid": [
+      0.1,
+      0.7937005259840998,
+      6.299605249474366,
+      50.0
+    ],
+    "density": {
+      "density_keep": 0.5,
+      "density_k": 15
+    }
+  },
+  "config_hash": "d420e003f769",
+  "results": [
+    {
+      "n_cells": 32,
+      "kappa": 4,
+      "seed": 0,
+      "ring_score": 5.319001983732332,
+      "ring_p": 0.16666666666666666,
+      "is_ring": true,
+      "manifold_mae": 0.14707907070711004,
+      "decode_mae": 0.12074077994700964,
+      "decode_sigma": 0.7937005259840998,
+      "runtime_s": 1.65248902500025
+    }
+  ]
+}

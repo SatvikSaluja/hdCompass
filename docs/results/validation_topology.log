@@ -1,0 +1,33 @@
+/home/satvik/hdcompass/.venv/lib/python3.12/site-packages/pynapple/io/interface_nwb.py:133: UserWarning: DataFrame is not sorted by start times. Sorting it.
+  data = nap.IntervalSet(df)
+[topology] as_run_fps800: {'ring_score': 1.0387752632792642, 'null_max': 1.2770324699616071, 'p': 0.45454545454545453, 'is_ring': False}
+[topology] first_600s: {'ring_score': 1.2982230830214159, 'null_max': 1.3066215078363914, 'p': 0.18181818181818182, 'is_ring': False}
+[topology] random_6000: {'ring_score': 1.0531925340918913, 'null_max': 1.317219204573263, 'p': 0.45454545454545453, 'is_ring': False}
+[topology] density_top50: {'ring_score': 4.918604640747927, 'null_max': 1.4825263767317076, 'p': 0.09090909090909091, 'is_ring': True}
+[topology] as_run_fps800: {'ring_score': 6.273748709517073, 'null_max': 1.1426512298476974, 'p': 0.09090909090909091, 'is_ring': True}
+[topology] first_600s: {'ring_score': 6.342018739860279, 'null_max': 1.3682667902150385, 'p': 0.09090909090909091, 'is_ring': True}
+[topology] random_6000: {'ring_score': 7.313764826427748, 'null_max': 1.1670088779151582, 'p': 0.09090909090909091, 'is_ring': True}
+[topology] density_top50: {'ring_score': 13.630224233687336, 'null_max': 1.124198916349193, 'p': 0.09090909090909091, 'is_ring': True}
+	Command being timed: ".venv/bin/python scripts/validate.py topology"
+	User time (seconds): 330.62
+	System time (seconds): 13.24
+	Percent of CPU this job got: 106%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:22.74
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 875540
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 30
+	Minor (reclaiming a frame) page faults: 3771368
+	Voluntary context switches: 747
+	Involuntary context switches: 12609
+	Swaps: 0
+	File system inputs: 110304
+	File system outputs: 64
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

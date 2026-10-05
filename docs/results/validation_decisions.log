@@ -1,0 +1,64 @@
+/home/satvik/hdcompass/.venv/lib/python3.12/site-packages/pynapple/io/interface_nwb.py:133: UserWarning: DataFrame is not sorted by start times. Sorting it.
+  data = nap.IntervalSet(df)
+[decisions] real_wake k=10 keep=0.3: {'density_k': 10, 'density_keep': 0.3, 'ring_score': 3.8457800251198515, 'null_max': 1.1950677060916657, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=10 keep=0.5: {'density_k': 10, 'density_keep': 0.5, 'ring_score': 4.184211510220529, 'null_max': 1.3251288686451914, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=10 keep=0.7: {'density_k': 10, 'density_keep': 0.7, 'ring_score': 2.8909311607688832, 'null_max': 1.2873622325903884, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=15 keep=0.3: {'density_k': 15, 'density_keep': 0.3, 'ring_score': 1.0246463313644032, 'null_max': 1.325393316870726, 'p': 0.7619047619047619, 'is_ring': False}
+[decisions] real_wake k=15 keep=0.5: {'density_k': 15, 'density_keep': 0.5, 'ring_score': 4.918604640747927, 'null_max': 1.4825263767317076, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=15 keep=0.7: {'density_k': 15, 'density_keep': 0.7, 'ring_score': 4.951758246773133, 'null_max': 1.2268252203059045, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=30 keep=0.3: {'density_k': 30, 'density_keep': 0.3, 'ring_score': 1.623335458550234, 'null_max': 1.1907329553489927, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=30 keep=0.5: {'density_k': 30, 'density_keep': 0.5, 'ring_score': 5.1750379797448485, 'null_max': 1.3889552327663266, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] real_wake k=30 keep=0.7: {'density_k': 30, 'density_keep': 0.7, 'ring_score': 4.328738262284196, 'null_max': 1.17049730040956, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=10 keep=0.3: {'density_k': 10, 'density_keep': 0.3, 'ring_score': 17.681946124179564, 'null_max': 1.1594331214507754, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=10 keep=0.5: {'density_k': 10, 'density_keep': 0.5, 'ring_score': 13.20538609146944, 'null_max': 1.2151525343073883, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=10 keep=0.7: {'density_k': 10, 'density_keep': 0.7, 'ring_score': 12.43712735112631, 'null_max': 1.1860871399658508, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=15 keep=0.3: {'density_k': 15, 'density_keep': 0.3, 'ring_score': 15.62068731840108, 'null_max': 1.1789873335563272, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=15 keep=0.5: {'density_k': 15, 'density_keep': 0.5, 'ring_score': 13.630224233687336, 'null_max': 1.321621360162523, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=15 keep=0.7: {'density_k': 15, 'density_keep': 0.7, 'ring_score': 11.454656401534658, 'null_max': 1.3368585394651031, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=30 keep=0.3: {'density_k': 30, 'density_keep': 0.3, 'ring_score': 16.53359501100812, 'null_max': 1.2095548339377904, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=30 keep=0.5: {'density_k': 30, 'density_keep': 0.5, 'ring_score': 14.923902329859688, 'null_max': 1.1584804520602214, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] synthetic_ring k=30 keep=0.7: {'density_k': 30, 'density_keep': 0.7, 'ring_score': 11.247704716058983, 'null_max': 1.2884857880969856, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] no_ring_control k=10 keep=0.3: {'density_k': 10, 'density_keep': 0.3, 'ring_score': 1.0716273199419442, 'null_max': 1.3266194701584837, 'p': 0.42857142857142855, 'is_ring': False}
+[decisions] no_ring_control k=10 keep=0.5: {'density_k': 10, 'density_keep': 0.5, 'ring_score': 1.2727411594990181, 'null_max': 1.1761039783788991, 'p': 0.047619047619047616, 'is_ring': True}
+[decisions] no_ring_control k=10 keep=0.7: {'density_k': 10, 'density_keep': 0.7, 'ring_score': 1.010449981939484, 'null_max': 1.170511273901312, 'p': 0.9523809523809523, 'is_ring': False}
+[decisions] no_ring_control k=15 keep=0.3: {'density_k': 15, 'density_keep': 0.3, 'ring_score': 1.038354022997592, 'null_max': 1.2015281752956786, 'p': 0.5238095238095238, 'is_ring': False}
+[decisions] no_ring_control k=15 keep=0.5: {'density_k': 15, 'density_keep': 0.5, 'ring_score': 1.0200950074781654, 'null_max': 1.3323581066670864, 'p': 0.7619047619047619, 'is_ring': False}
+[decisions] no_ring_control k=15 keep=0.7: {'density_k': 15, 'density_keep': 0.7, 'ring_score': 1.0404689633301687, 'null_max': 1.0768684458747158, 'p': 0.38095238095238093, 'is_ring': False}
+[decisions] no_ring_control k=30 keep=0.3: {'density_k': 30, 'density_keep': 0.3, 'ring_score': 1.1277180350310225, 'null_max': 1.2673142778904065, 'p': 0.09523809523809523, 'is_ring': False}
+[decisions] no_ring_control k=30 keep=0.5: {'density_k': 30, 'density_keep': 0.5, 'ring_score': 1.0178640837285597, 'null_max': 1.1437664672722538, 'p': 0.8095238095238095, 'is_ring': False}
+[decisions] no_ring_control k=30 keep=0.7: {'density_k': 30, 'density_keep': 0.7, 'ring_score': 1.0013117219941037, 'null_max': 1.2674360246392988, 'p': 0.9047619047619048, 'is_ring': False}
+/home/satvik/hdcompass/scripts/validate.py:480: UserWarning: Some starts and ends are equal. Removing 1 microsecond!
+  bad = nap.IntervalSet(starts, starts + block)
+[decisions] contamination silent: {'as_specified': {'ring_score': 1.2104611955295534, 'null_max': 1.2232985636377602, 'p': 0.09523809523809523, 'is_ring': False}, 'density_15_0.5': {'ring_score': 2.126813987878186, 'null_max': 1.208412090182118, 'p': 0.047619047619047616, 'is_ring': True}}
+/home/satvik/hdcompass/scripts/validate.py:480: UserWarning: Some starts and ends are equal. Removing 1 microsecond!
+  bad = nap.IntervalSet(starts, starts + block)
+[decisions] contamination independent: {'as_specified': {'ring_score': 1.0213379605388866, 'null_max': 1.2734411158099967, 'p': 0.5714285714285714, 'is_ring': False}, 'density_15_0.5': {'ring_score': 10.4996607756844, 'null_max': 1.1485472072724334, 'p': 0.047619047619047616, 'is_ring': True}}
+[decisions] dropped vs kept: {'mean_population_z_kept': -0.09460250219486059, 'mean_population_z_dropped': 0.0946121633981387, 'median_head_speed_kept_rad_s': 0.49043322659614574, 'median_head_speed_dropped_rad_s': 0.5488967499974535}
+[decisions] 200 shuffles: {'ring_score': 4.918604640747927, 'null_max': 1.4825263767317076, 'p': 0.004975124378109453, 'is_ring': True}
+[decisions] floor {'floor_hz': 1.0, 'n_units': 19, 'hmm_ring_tuning_mae_rad': 0.40620690649292945, 'hmm_head_tuning_mae_rad': 0.2073730696952012}
+[decisions] floor {'floor_hz': 0.3, 'n_units': 24, 'hmm_ring_tuning_mae_rad': 0.4064036611870324, 'hmm_head_tuning_mae_rad': 0.20704566034940092}
+[decisions] floor {'floor_hz': 0.1, 'n_units': 28, 'hmm_ring_tuning_mae_rad': 0.4061907096933491, 'hmm_head_tuning_mae_rad': 0.20650820762231073}
+[decisions] VERDICT {'grid_detections_out_of_9': {'real_wake': 8, 'synthetic_ring': 9, 'no_ring_control': 1}, 'adopt_density_filter': True, 'density_default': {'density_k': 15, 'density_keep': 0.5}, 'decode_min_rate_default': 1.0}
+	Command being timed: ".venv/bin/python scripts/validate.py decisions --jobs 8"
+	User time (seconds): 8532.65
+	System time (seconds): 434.06
+	Percent of CPU this job got: 455%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 32:48.71
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2078716
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 7
+	Minor (reclaiming a frame) page faults: 100481907
+	Voluntary context switches: 48328
+	Involuntary context switches: 1031842
+	Swaps: 0
+	File system inputs: 1872
+	File system outputs: 328
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

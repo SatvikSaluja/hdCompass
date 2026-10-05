@@ -1,0 +1,879 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Full results and validation — hdcompass</title><style>
+:root{color-scheme:light;--ink:#1e2933;--muted:#53616c;--rule:#dce2e6;--accent:#175b49}*{box-sizing:border-box}body{margin:0;background:#fafbf9;color:var(--ink);font:16px/1.65 system-ui,sans-serif}main{max-width:1140px;margin:auto;padding:42px 24px 64px}header{border-bottom:2px solid var(--ink);padding-bottom:24px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.2;margin:8px 0 16px;letter-spacing:-.035em}h2{font-size:1.65rem;margin:0 0 8px}h3{font-size:1.1rem;margin:28px 0 8px}p{max-width:850px}a{color:#165e79;text-underline-offset:3px}nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}.meta,small,caption{color:var(--muted);font-size:.88rem}section{padding:34px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}.verdict{border-left:3px solid var(--accent);padding:9px 18px;background:#eef5f0;margin:18px 0}.limit{border-left-color:#976722;background:#faf3e8}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:14px 0 22px;font-variant-numeric:tabular-nums}caption{text-align:left;margin-bottom:10px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}th{background:#edf0ed;white-space:normal}td{white-space:nowrap}details{margin:20px 0}summary{cursor:pointer;font-weight:600}li{margin:7px 0}.source-list{columns:2;overflow-wrap:anywhere}footer{font-size:.88rem;color:var(--muted);padding-top:22px}@media(max-width:650px){main{padding:24px 16px}.source-list{columns:1}th,td{padding:8px}section{padding:26px 0}}@media print{body{background:white}main{max-width:none;padding:0}.scroll{overflow:visible}table{font-size:8pt}nav{display:none}details>*{display:block}.source-list{columns:1}}
+
+
+img{max-width:100%;height:auto}pre{overflow:auto;padding:16px;background:#edf0ed}td{white-space:normal;min-width:80px}.scroll td{white-space:nowrap}code{overflow-wrap:anywhere}h2{margin-top:28px}</style></head><body><main><header><div class="meta">HDCOMPASS · RESULTS</div><h1>Full results and validation</h1><nav aria-label="Page sections"><a href="index.html">Overview</a><a href="report.html">Full report</a><a href="archive.html">All reports and figures</a><a href="results.zip">Download all results</a></nav></header><h1>hdcompass — results and validation (2026-09-27)</h1>
+<p>All numbers come from report files produced by the commands in §6, at commit <code>fbacf85</code>. The
+files live under <code>results/</code>, which is git-ignored; rerun the commands to regenerate them.
+Angles are in radians. Chance-level MAE for a random angle is π/2 ≈ 1.57 rad.</p>
+<h2>1. Summary</h2>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>question</th>
+<th>answer</th>
+<th>evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Can the HD angle be recovered from ADn spikes with no labels?</td>
+<td><strong>Yes.</strong> Error is 0.42 rad (≈24°) on held-out wake, stable across embedding settings</td>
+<td>§3.1</td>
+</tr>
+<tr>
+<td>Does a label-free decoder work?</td>
+<td><strong>Yes.</strong> HMM with ring-derived tuning: 0.41 rad held-out, vs 0.58 for an independent-bin decoder and 0.21 for a decoder given tracked head angle</td>
+<td>§3.1</td>
+</tr>
+<tr>
+<td>Does the topology test detect the ring on the full wake?</td>
+<td><strong>As first specified, no</strong> (score 1.04, p = 0.48). <strong>With the density filter adopted by pre-registered checks, yes</strong>: score 4.92, p = 1/201 with 200 shuffles</td>
+<td>§3.2, §6.1</td>
+</tr>
+<tr>
+<td>How does the compass move across states?</td>
+<td>Faster and less certain in SWS than in REM, and in REM than in wake: σ = 0.54 / 0.96 / 2.97 rad/√s</td>
+<td>§3.3</td>
+</tr>
+<tr>
+<td>Is the decoder's uncertainty trustworthy?</td>
+<td><strong>On synthetic data yes</strong> (90% intervals cover 90–92%). <strong>On real data no</strong>: they cover 64%</td>
+<td>§3.4, §4</td>
+</tr>
+<tr>
+<td>Is the SWS result an artifact of lower firing rates?</td>
+<td>Not of a uniform gain change. Rescaling tuning leaves σ unchanged and fits worse</td>
+<td>§3.5</td>
+</tr>
+<tr>
+<td>Should low-rate units be decoded too?</td>
+<td><strong>No gain.</strong> Held-out error is 0.406 rad with 19, 24 or 28 units (1, 0.3, 0.1 Hz floors), so the 1 Hz floor stays</td>
+<td>§6.2</td>
+</tr>
+<tr>
+<td>Does the frozen ring test work on synthetic data?</td>
+<td><strong>Yes:</strong> 36 of 36 sweep configurations (the unfiltered test: 33/36)</td>
+<td>§5</td>
+</tr>
+<tr>
+<td>Does it generalise to another dataset and region?</td>
+<td><strong>Decoding and the SWS result, yes.</strong> Across 22 post-subiculum sessions (DANDI:000939) the label-free decoder reaches a median 0.36 rad. σ SWS &gt; wake in 21/22 sessions (p = 1.8e-5), SWS &gt; REM in 19/20, and SWS variance &gt; wake in 21/22. REM ≈ wake there. The ring test finds a ring in only 12/22</td>
+<td>§7</td>
+</tr>
+<tr>
+<td>Does the pipeline recover known ground truth over a full-length session?</td>
+<td><strong>Yes</strong> for ring, angle, wake/REM σ and error, over 17,000 s simulations and 2 seeds. Jumps are undercounted about 20×</td>
+<td>§4</td>
+</tr>
+</tbody>
+</table></div>
+<h2>2. Data and settings</h2>
+<p>Mouse32-140822 (Peyrache et al. 2015). 31 ADn units, of which 19 fire ≥ 1 Hz during wake and
+are used (the other 12 fire at 0.02–0.70 Hz). Durations analysed: wake 1958.9 s, REM 2565 s
+(29 epochs), SWS 12402 s (44 epochs).</p>
+<p>Settings: rates in 0.1 s bins smoothed at 0.1 s; PCA-10 → Isomap-2D with 15 neighbours; ripser
+H1 on 800 landmarks with 20 shuffles; tuning on 60 bins; the HMM uses 20 ms bins, ε = 0, and
+chooses σ by maximum likelihood on a 12-point grid from 0.1 to 50. Adjacent grid points differ
+by a factor of 1.76, so each fitted σ is known to ± one grid step.</p>
+<h2>3. Mouse32 results</h2>
+<h3>3.1 Label-free recovery and decoding (wake, validated against tracked head angle)</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>estimate</th>
+<th>in-sample MAE</th>
+<th>held-out MAE (2-fold, 60 s blocks)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unsupervised ring angle (Isomap + circle fit)</td>
+<td>0.417</td>
+<td><strong>0.420</strong></td>
+</tr>
+<tr>
+<td>HMM, tuning from ring angle (fully label-free)</td>
+<td>0.401</td>
+<td><strong>0.406</strong></td>
+</tr>
+<tr>
+<td>independent-bin decoder, tuning from ring angle</td>
+<td>0.576</td>
+<td>0.581</td>
+</tr>
+<tr>
+<td>HMM, tuning from tracked head angle (supervised reference)</td>
+<td>0.205</td>
+<td>0.207</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Held-out and in-sample errors agree to within 0.005 rad, so fitting the tuning and σ on the
+same data inflates nothing at this length. This resolves review finding R1.</li>
+<li>The HMM's temporal prior cuts the label-free error by 30% relative to independent bins.</li>
+<li>Ring-angle error across Isomap settings (neighbours 10/15/30, seeds 0/1/2): 0.410–0.439.</li>
+<li>The gap to the supervised decoder (0.41 vs 0.21) is the price of not knowing the labels.
+At 120 s I measured that warping of the ring angle is not the main cause (review C8).</li>
+</ul>
+<h3>3.2 Topology: the ring test</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>point cloud (real wake)</th>
+<th>ring score</th>
+<th>null max (shuffles)</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>as specified</strong>: FPS 800 landmarks of 19,585 points</td>
+<td><strong>1.04</strong></td>
+<td>1.28 (20)</td>
+<td><strong>no ring</strong>, p = 0.48</td>
+</tr>
+<tr>
+<td>first 600 s</td>
+<td>1.30</td>
+<td>1.31 (10)</td>
+<td>no ring</td>
+</tr>
+<tr>
+<td>random 6,000 points</td>
+<td>1.05</td>
+<td>1.32 (10)</td>
+<td>no ring</td>
+</tr>
+<tr>
+<td><em>exploratory:</em> keep the densest 50% (15-NN distance), then FPS 800</td>
+<td><strong>4.92</strong></td>
+<td>1.48 (10)</td>
+<td>ring, beats all 10 shuffles (p = 1/11, the floor)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The same four variants on a 2,000 s, 20-cell synthetic wake (truth: ring) all detect it
+(scores 6.3, 6.3, 7.3 and 13.6, against null maxima of 1.1–1.4).</p>
+<p><strong>Reading.</strong> The pre-specified detector misses the ring in the real data, though the embedding
+shows it clearly (<code>results/mouse32/ring.png</code>) and the ring angle decodes heading. The failure is
+not about data length, since the same detector works on synthetic data of equal length. The
+real point cloud has scattered off-ring states that fill the hole in a Rips complex; removing
+low-density points recovers a strong H1 bar.</p>
+<p>The density filter was chosen <strong>after</strong> seeing the failure, so this table alone is exploratory.
+§6.1 then tested it with rules fixed in advance, and it passed. It should be confirmed on other sessions before being adopted. (The
+120 s smoke run's positive result, score 3.64, is consistent with this: a short slice has fewer
+off-ring points.)</p>
+<h3>3.3 Compass dynamics by state (label-free decoder)</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>state</th>
+<th>σ (rad/√s)</th>
+<th>median |speed| (rad/s)</th>
+<th>jump fraction (&gt;π/2 per 20 ms)</th>
+<th>mean circular variance</th>
+<th>bins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wake</td>
+<td>0.545</td>
+<td>0.66</td>
+<td>0</td>
+<td>0.0058</td>
+<td>97,943</td>
+</tr>
+<tr>
+<td>REM</td>
+<td>0.958</td>
+<td>1.26</td>
+<td>0.00012</td>
+<td>0.0137</td>
+<td>128,250</td>
+</tr>
+<tr>
+<td>SWS</td>
+<td>2.966</td>
+<td>5.16</td>
+<td>0.0019</td>
+<td>0.0676</td>
+<td>620,100</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>The ordering on every metric is <strong>SWS ≫ REM &gt; wake</strong>. None of the σ fits sits at a grid edge.</li>
+<li>Speeds are in the ring's frame; wake alignment to head direction is rotation-only, sign +1.</li>
+<li>The jump fraction is a <strong>lower bound</strong>. On synthetic SWS with known jumps the decoder reports
+about 1/20 of them (§4), because with ε = 0 the HMM renders jumps as fast sweeps.</li>
+<li>This matches the picture in Peyrache et al. (2015): the HD signal stays coherent in REM at
+near-wake speeds and moves much faster in SWS. The circular variance adds that the decoder is
+about 10× less certain in SWS than in wake.</li>
+</ul>
+<h3>3.4 Calibration</h3>
+<p>On held-out wake with head-angle tuning, the 90% highest-density posterior sets (mean width
+0.43 rad) contain the true head angle in <strong>64%</strong> of bins. Because the identical decoder is
+calibrated on synthetic data (§4), this is misfit between the model and the real spiking, not
+a code bug. The likely causes are overdispersed or correlated spiking and tuning that isn't
+stationary. <strong>Treat the reported posterior variances as relative measures across states, not
+absolute error bars.</strong></p>
+<h3>3.5 Firing-rate gain</h3>
+<p>Population rate of the 19 units relative to wake: REM ×0.864, SWS ×0.763. Decoding sleep with
+wake tuning rescaled by that ratio:</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>state</th>
+<th>σ uncorrected → corrected</th>
+<th>log-likelihood change</th>
+<th>circular variance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REM</td>
+<td>0.958 → 0.958</td>
+<td>−1,378 (worse)</td>
+<td>0.0137 → 0.0137</td>
+</tr>
+<tr>
+<td>SWS</td>
+<td>2.966 → 2.966</td>
+<td>−12,320 (worse)</td>
+<td>0.068 → 0.075</td>
+</tr>
+</tbody>
+</table></div>
+<p>A uniform gain change is rejected by likelihood and doesn't move σ. So the SWS/REM/wake
+differences in §3.3 are <strong>not explained by a uniform rate drop</strong>. Non-uniform rate changes
+(per-cell or tuning-width changes) were not tested.</p>
+<h2>4. Ground-truth validation on long simulations</h2>
+<p><code>simulate_session</code> builds a Mouse32-shaped session: 20 cells, κ = 4, wake 2000 s, REM 2500 s
+(90 s epochs), SWS 12000 s (300 s epochs), 17,000 s in total. Wake and REM have σ = 1 and a peak
+of 30 Hz. SWS has σ = 4, jumps at 0.3/s and a peak of 26 Hz (a ~13% gain drop). This is run
+through the <strong>same full pipeline</strong> and then scored against the true angle in every state,
+including sleep. The &quot;true model&quot; rows use the true tuning, σ and jump probability, so they are
+the best achievable.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>seed 0</th>
+<th>seed 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ring test (as specified)</td>
+<td>score 5.87, null max 1.32 → ring</td>
+<td>4.68, null max 1.08 → ring</td>
+</tr>
+<tr>
+<td>ring-angle MAE (wake)</td>
+<td>0.151</td>
+<td>0.160</td>
+</tr>
+</tbody>
+</table></div>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>state</th>
+<th>metric</th>
+<th>seed 0</th>
+<th>seed 1</th>
+<th>true model (s0 / s1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wake</td>
+<td>decoded σ (true 1.0)</td>
+<td>0.958</td>
+<td>0.958</td>
+<td>0.958 / 0.958</td>
+</tr>
+<tr>
+<td></td>
+<td>MAE</td>
+<td>0.136</td>
+<td>0.143</td>
+<td>0.131 / 0.132</td>
+</tr>
+<tr>
+<td></td>
+<td>90% coverage</td>
+<td>0.913</td>
+<td>0.897</td>
+<td>0.920 / 0.918</td>
+</tr>
+<tr>
+<td>REM</td>
+<td>decoded σ (true 1.0)</td>
+<td>0.958</td>
+<td>0.958</td>
+<td>0.958 / 0.958</td>
+</tr>
+<tr>
+<td></td>
+<td>MAE</td>
+<td>0.135</td>
+<td>0.142</td>
+<td>0.131 / 0.131</td>
+</tr>
+<tr>
+<td></td>
+<td>90% coverage</td>
+<td>0.916</td>
+<td>0.901</td>
+<td>0.919 / 0.920</td>
+</tr>
+<tr>
+<td>SWS</td>
+<td>decoded σ (true 4.0)</td>
+<td>2.966</td>
+<td>2.966</td>
+<td>2.966 / 2.966</td>
+</tr>
+<tr>
+<td></td>
+<td>MAE</td>
+<td>0.315</td>
+<td>0.317</td>
+<td>0.309 / 0.309</td>
+</tr>
+<tr>
+<td></td>
+<td>90% coverage</td>
+<td>0.822</td>
+<td>0.820</td>
+<td>0.864 / 0.866</td>
+</tr>
+<tr>
+<td></td>
+<td>jump fraction, decoded (true 0.0086)</td>
+<td>0.0004</td>
+<td>0.0004</td>
+<td>—</td>
+</tr>
+<tr>
+<td></td>
+<td>gain correction changes σ or MAE?</td>
+<td>no</td>
+<td>no</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>What this establishes:</p>
+<ul>
+<li><strong>Label-free ≈ oracle.</strong> In every state the label-free pipeline's error is within 0.012 rad
+of the true-model decoder. The unsupervised stages cost almost nothing when the data are a
+clean ring.</li>
+<li><strong>σ is recovered to the nearest grid point</strong> in wake and REM. In SWS both the pipeline and the
+true-model fit choose 2.97 for a true 4.0, one grid step low: the jumps are absorbed by the
+ε = 0 fit and the grid is coarse. The SWS &gt; REM ≈ wake ordering is recovered.</li>
+<li><strong>The decoder is calibrated when its model is right</strong> (coverage 0.90–0.92 at nominal 0.90). It
+undercovers only for SWS with jumps (0.82–0.87).</li>
+<li><strong>Jump fraction undercounts by about 20×.</strong> It is a qualitative indicator only.</li>
+</ul>
+<h2>5. Synthetic recovery sweep (600 s, 3 seeds per cell)</h2>
+<p>36 configurations: n_cells ∈ {8, 16, 32, 64} × κ ∈ {2, 4, 8} × 3 seeds, σ = 1.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>κ</th>
+<th>cells</th>
+<th>ring detected</th>
+<th>ring-angle MAE (mean ± sd)</th>
+<th>HMM (true tuning) MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>8 / 16 / 32 / 64</td>
+<td>3/3 each</td>
+<td>0.203 / 0.170 / 0.147 / 0.136</td>
+<td>0.185 / 0.154 / 0.129 / 0.109</td>
+</tr>
+<tr>
+<td>4</td>
+<td>8 / 16 / 32 / 64</td>
+<td>3/3 each</td>
+<td>0.194 / 0.156 / 0.154 / 0.137</td>
+<td>0.167 / 0.139 / 0.115 / 0.097</td>
+</tr>
+<tr>
+<td>8</td>
+<td>8 / 16 / 32 / 64</td>
+<td><strong>0/3</strong>, 3/3, 3/3, 3/3</td>
+<td>0.206 / 0.158 / 0.147 / 0.157 ± 0.025</td>
+<td>0.157 / 0.128 / 0.106 / 0.089</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>The ring is detected in 33 of 36 configurations. It fails only for 8 cells with very narrow
+tuning (κ = 8), where the circle is sparsely covered.</li>
+<li>HMM error falls monotonically with cell count for every κ. Ring-angle error falls too, except
+for κ = 8 between 32 and 64 cells (within 1 sd).</li>
+<li>The fitted σ is within one grid step of the true 1.0 in all 36 runs.</li>
+<li>Figure: <code>results/sweep/sweep.png</code>.</li>
+<li><strong>Rerun with the frozen density filter</strong> (§6; <code>results/sweep_frozen/</code>, config hash
+<code>c3f139c596c9</code>, 18:59 with 8 processes): the ring is detected in <strong>36 of 36</strong> configurations,
+including the three κ = 8, 8-cell misses (median score 5.4). Median scores rise to 5.4–25.6.
+Decoding and ring-angle errors are identical, since only the ring test changed.</li>
+</ul>
+<h2>6. Pre-registered decisions: the frozen pipeline</h2>
+<p>Two defaults were open after the first runs. Mouse32 was treated as the development session:
+the rules below were written into <code>scripts/validate.py</code> (<code>DECISION_RULES</code>) before the checks
+ran, applied automatically, and the resulting defaults frozen (commit <code>6b49e03</code>) before any
+new dataset was analysed. Results: <code>results/validation/decisions.json</code> (30.8 min, 2.1 GB).</p>
+<h3>6.1 Ring test: adopt the density filter?</h3>
+<p><strong>Rule.</strong> Adopt k = 15, keep = 0.5 (the setting first tried in §3.2, not the best one) only if
+all of these hold:</p>
+<ul>
+<li>(a) real wake is a ring in ≥ 7 of 9 grid settings;</li>
+<li>(b) a synthetic ring is detected in 9 of 9;</li>
+<li>(c) a synthetic population with no shared angle is detected in ≤ 1 of 9. Each cell follows
+its own latent angle, and each test has a ~5% false-positive rate;</li>
+<li>(d) the 200-shuffle p-value at the frozen setting is below 0.05/4, correcting for the four
+variants tried in §3.2.</li>
+</ul>
+<p>Ring score per setting (20 shuffles each; ✔ = beats every shuffle):</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>setting</th>
+<th>real Mouse32 wake</th>
+<th>synthetic ring (2000 s)</th>
+<th>no-ring control (2000 s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no filter</td>
+<td>✘ 1.04</td>
+<td>✔ 6.27</td>
+<td>✘ 1.11</td>
+</tr>
+<tr>
+<td>k=10, keep 0.3 / 0.5 / 0.7</td>
+<td>✔ 3.85 / ✔ 4.18 / ✔ 2.89</td>
+<td>✔ 17.7 / 13.2 / 12.4</td>
+<td>✘ 1.07 / <strong>✔ 1.27</strong> / ✘ 1.01</td>
+</tr>
+<tr>
+<td>k=15, keep 0.3 / 0.5 / 0.7</td>
+<td><strong>✘ 1.02</strong> / ✔ 4.92 / ✔ 4.95</td>
+<td>✔ 15.6 / 13.6 / 11.5</td>
+<td>✘ 1.04 / ✘ 1.02 / ✘ 1.04</td>
+</tr>
+<tr>
+<td>k=30, keep 0.3 / 0.5 / 0.7</td>
+<td>✔ 1.62 / ✔ 5.18 / ✔ 4.33</td>
+<td>✔ 16.5 / 14.9 / 11.2</td>
+<td>✘ 1.13 / ✘ 1.02 / ✘ 1.00</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Outcome: adopted.</strong> The counts are 8/9, 9/9 and 1/9, and the 200-shuffle p-value is
+1/201 ≈ 0.005 (null maximum 1.48).</p>
+<ul>
+<li>The one control false positive is weak: 1.27 against a null maximum of 1.18. Most real-wake
+settings score 2.9–5.2.</li>
+<li>Keeping only 30% of points can fragment the ring (k = 15 misses; k = 30 is weak at 1.62), so
+keep ≥ 0.5 is the safer range.</li>
+</ul>
+<p><strong>Mechanism check.</strong> In a synthetic ring, 30% of 2 s blocks were replaced by off-ring activity:</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>off-ring activity</th>
+<th>as specified</th>
+<th>density filter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quiet (all cells at baseline)</td>
+<td>✘ 1.21 (null max 1.22)</td>
+<td>✔ 2.13 (null max 1.21)</td>
+</tr>
+<tr>
+<td>desynchronised (each cell its own angle)</td>
+<td>✘ 1.02 (null max 1.27)</td>
+<td>✔ 10.5 (null max 1.15)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A minority of off-ring states is enough to defeat the unfiltered test, and the filter recovers
+the ring. On real data, though, the dropped bins are <strong>not</strong> quiet periods. Their mean population
+z-score is +0.09 (kept: −0.09) and the head speed is similar (0.55 vs 0.49 rad/s). They are
+sparse, slightly more active states, and what they are physiologically is open.</p>
+<p><strong>Caveat found afterwards:</strong> on the 120 s <code>--quick</code> slice (1,196 points) the frozen filter
+<em>misses</em> the ring (1.03, null max 1.46), where the unfiltered test found it (3.64). The filter
+was validated only at full length (~20,000 points). Halving an already small point cloud leaves
+the ring too sparse, so <code>--quick</code> topology is a smoke test only.</p>
+<p><strong>Frozen Mouse32 rerun</strong> (<code>results/mouse32_frozen/</code>, 3 min 11 s with 8 processes): ring score
+4.92 against a null maximum of 1.48, so a ring. Every other number is identical to §3, since
+only the topology step changed.</p>
+<h3>6.2 Decoder rate floor</h3>
+<p><strong>Rule.</strong> Take the lowest held-out (2-fold) label-free MAE among floors of 1, 0.3 and 0.1 Hz.
+Keep 1 Hz unless another floor beats it by more than 0.005 rad.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>floor</th>
+<th>units</th>
+<th>label-free HMM MAE</th>
+<th>head-tuned HMM MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Hz</td>
+<td>19</td>
+<td>0.4062</td>
+<td>0.2074</td>
+</tr>
+<tr>
+<td>0.3 Hz</td>
+<td>24</td>
+<td>0.4064</td>
+<td>0.2070</td>
+</tr>
+<tr>
+<td>0.1 Hz</td>
+<td>28</td>
+<td>0.4062</td>
+<td>0.2065</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Outcome: 1 Hz kept.</strong> The extra units fire too rarely to change the posterior.</p>
+<h2>7. Second dataset: DANDI:000939 (mouse post-subiculum, 22 sessions)</h2>
+<p>Duszkiewicz, Skromne Carrasco &amp; Peyrache, DANDI:000939 v0.260512.1701
+(https://doi.org/10.48324/dandi.000939/0.260512.1701, CC-BY-4.0; original study Duszkiewicz et
+al. 2024): head-direction recordings in the post-subiculum during open-field exploration and
+home-cage sleep, with scored wake, NREM and REM. It is a different brain region from Mouse32 (ADn) and a different lab setup.</p>
+<p><strong>The analysis plan was fixed before any session was analysed</strong> (docstring of
+<code>scripts/run_dandi000939.py</code>, commit <code>1c9ceb8</code>):</p>
+<ul>
+<li>the 22 sessions without optogenetics;</li>
+<li>wake = the first open-field arena (<code>wake_square</code>); SWS/REM = <code>nrem</code>/<code>rem</code>;</li>
+<li>the frozen pipeline of §6, unchanged;</li>
+<li>REM counted in statistics only with ≥ 60 s (20 of 22 sessions qualify);</li>
+<li>three one-sided paired Wilcoxon tests.</li>
+</ul>
+<p>The whole run took 52:41 with a 4.0 GB peak, streaming ~60 MB per session instead of ~23 GB.</p>
+<p>Per session: 42–185 units (40–156 above the 1 Hz floor), of which 21–117 are flagged as HD
+cells. The flags are never used by the pipeline. Wake lasts 1805–2635 s, SWS 1153–10160 s, and
+REM 0–1040 s (median 294 s).</p>
+<h3>7.1 Pre-registered hypotheses: all three confirmed</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>hypothesis</th>
+<th>sessions in the predicted direction</th>
+<th>median ratio</th>
+<th>one-sided Wilcoxon p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>σ SWS &gt; σ wake</td>
+<td>21 of 22</td>
+<td>3.1×</td>
+<td>1.8 × 10⁻⁵</td>
+</tr>
+<tr>
+<td>σ SWS &gt; σ REM</td>
+<td>19 of 20</td>
+<td>3.1×</td>
+<td>4.4 × 10⁻⁵</td>
+</tr>
+<tr>
+<td>circular variance SWS &gt; wake</td>
+<td>21 of 22</td>
+<td>6.5×</td>
+<td>4.8 × 10⁻⁷</td>
+</tr>
+</tbody>
+</table></div>
+<p>The one reversal in the σ tests is A3723, with SWS σ 0.18 against wake 0.54. Its SWS decoding
+may simply have failed; it isn't investigated here.</p>
+<h3>7.2 Label-free recovery</h3>
+<p>Medians over sessions:</p>
+<ul>
+<li>ring angle vs head direction: 0.40 rad;</li>
+<li>label-free HMM: <strong>0.36 rad</strong>;</li>
+<li>independent-bin decoder: 0.57 rad;</li>
+<li>HMM with head-angle tuning: 0.19 rad.</li>
+</ul>
+<p>The HMM beats independent bins in <strong>22 of 22</strong> sessions.</p>
+<p>The frozen ring test detects a ring in <strong>12 of 22</strong> sessions. <strong>Exploratory</strong> (not in the plan):
+detection and accuracy track the number of HD cells. Sessions with a detected ring have a median
+of 72 flagged HD cells, against 31.5 for the rest, and a median label-free error of 0.33 vs
+0.46 rad. The Spearman correlation between HD-cell count and label-free error is −0.58
+(p = 0.004). Post-subiculum sessions also contain many non-HD units (a median ~40%), which add
+noise dimensions after z-scoring. That plausibly makes the topology harder than in ADn, but it
+isn't tested.</p>
+<h3>7.3 Where this differs from Mouse32</h3>
+<ul>
+<li><strong>REM ≈ wake here.</strong> σ is equal at grid resolution in 15 of 20 sessions, and lower in 5.
+Mouse32 had REM σ 0.96 against wake 0.54. Region (post-subiculum vs ADn), the shorter REM
+periods and the coarse σ grid could each contribute; none is tested.</li>
+<li><strong>The ring test is weaker</strong> (12/22) than decoding. It is the least reliable stage of the
+pipeline.</li>
+</ul>
+<p>Per-session results (<code>results/dandi000939/&lt;session&gt;/report.json</code>, <code>summary.json</code>, <code>summary.png</code>;
+* = REM under 60 s, excluded from statistics; — = no REM):</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>session</th>
+<th>units (HD-flagged)</th>
+<th>ring (score)</th>
+<th>ring-angle MAE</th>
+<th>label-free HMM MAE</th>
+<th>head-tuned MAE</th>
+<th>σ wake / REM / SWS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A3701 191119</td>
+<td>102 (71)</td>
+<td>✔ 1.32</td>
+<td>0.42</td>
+<td>0.33</td>
+<td>0.24</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3702 191126</td>
+<td>90 (61)</td>
+<td>✔ 1.41</td>
+<td>0.39</td>
+<td>0.36</td>
+<td>0.17</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3703 191215</td>
+<td>103 (65)</td>
+<td>✘ 1.16</td>
+<td>0.40</td>
+<td>0.36</td>
+<td>0.21</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3705 200306</td>
+<td>117 (66)</td>
+<td>✔ 2.11</td>
+<td>0.21</td>
+<td>0.20</td>
+<td>0.18</td>
+<td>0.54 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A3706 200313</td>
+<td>126 (86)</td>
+<td>✔ 2.78</td>
+<td>0.33</td>
+<td>0.32</td>
+<td>0.16</td>
+<td>0.54 / 0.31 / 1.69</td>
+</tr>
+<tr>
+<td>A3707 200317</td>
+<td>185 (117)</td>
+<td>✔ 2.33</td>
+<td>0.38</td>
+<td>0.39</td>
+<td>0.22</td>
+<td>0.54 / 0.54* / 2.97</td>
+</tr>
+<tr>
+<td>A3708 200317b</td>
+<td>78 (44)</td>
+<td>✘ 1.17</td>
+<td>0.37</td>
+<td>0.30</td>
+<td>0.14</td>
+<td>0.54 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A3709 200601</td>
+<td>64 (21)</td>
+<td>✔ 2.35</td>
+<td>0.60</td>
+<td>0.53</td>
+<td>0.18</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3710 200609</td>
+<td>107 (80)</td>
+<td>✔ 1.61</td>
+<td>0.53</td>
+<td>0.50</td>
+<td>0.16</td>
+<td>0.54 / 0.54 / 0.96</td>
+</tr>
+<tr>
+<td>A3711 200810b</td>
+<td>142 (90)</td>
+<td>✔ 1.88</td>
+<td>0.29</td>
+<td>0.29</td>
+<td>0.22</td>
+<td>0.54 / 0.31 / 0.96</td>
+</tr>
+<tr>
+<td>A3712 200903a</td>
+<td>126 (73)</td>
+<td>✔ 2.28</td>
+<td>0.31</td>
+<td>0.30</td>
+<td>0.27</td>
+<td>0.54 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A3713 200909a</td>
+<td>88 (25)</td>
+<td>✘ 1.01</td>
+<td>0.39</td>
+<td>0.35</td>
+<td>0.21</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3716 201015b</td>
+<td>147 (93)</td>
+<td>✔ 3.02</td>
+<td>0.25</td>
+<td>0.21</td>
+<td>0.18</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A3717 201021</td>
+<td>98 (59)</td>
+<td>✔ 3.71</td>
+<td>0.32</td>
+<td>0.31</td>
+<td>0.18</td>
+<td>0.54 / 0.31 / 1.69</td>
+</tr>
+<tr>
+<td>A3723 201115</td>
+<td>68 (37)</td>
+<td>✘ 1.09</td>
+<td>0.53</td>
+<td>0.43</td>
+<td>0.17</td>
+<td>0.54 / 0.31 / 0.18</td>
+</tr>
+<tr>
+<td>A3728 210309b</td>
+<td>42 (27)</td>
+<td>✘ 1.10</td>
+<td>0.85</td>
+<td>0.79</td>
+<td>0.33</td>
+<td>0.96 / — / 2.97</td>
+</tr>
+<tr>
+<td>A3730 210323b</td>
+<td>77 (47)</td>
+<td>✘ 1.17</td>
+<td>0.63</td>
+<td>0.58</td>
+<td>0.19</td>
+<td>0.54 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A5505 200831</td>
+<td>55 (30)</td>
+<td>✘ 1.10</td>
+<td>0.39</td>
+<td>0.34</td>
+<td>0.19</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+<tr>
+<td>A5506 200914a</td>
+<td>49 (24)</td>
+<td>✘ 1.03</td>
+<td>0.76</td>
+<td>0.75</td>
+<td>0.24</td>
+<td>0.96 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A5507 200920</td>
+<td>96 (43)</td>
+<td>✔ 1.63</td>
+<td>0.49</td>
+<td>0.46</td>
+<td>0.19</td>
+<td>0.54 / 0.54 / 2.97</td>
+</tr>
+<tr>
+<td>A5508 200930</td>
+<td>52 (33)</td>
+<td>✘ 1.01</td>
+<td>0.65</td>
+<td>0.62</td>
+<td>0.20</td>
+<td>0.96 / 0.96 / 2.97</td>
+</tr>
+<tr>
+<td>A5801 200924</td>
+<td>46 (26)</td>
+<td>✘ 1.02</td>
+<td>0.59</td>
+<td>0.50</td>
+<td>0.23</td>
+<td>0.54 / 0.54 / 1.69</td>
+</tr>
+</tbody>
+</table></div>
+<h2>8. How these were produced</h2>
+<pre><code class="language-bash">.venv/bin/python scripts/run_synthetic_sweep.py          # results/sweep/          1:04:51, 1.3 GB peak*
+.venv/bin/python scripts/run_mouse32.py                  # results/mouse32/        12:00,   2.7 GB peak*
+.venv/bin/python scripts/validate.py real                # results/validation/real.json         3:37, 2.8 GB
+.venv/bin/python scripts/validate.py synthetic --seed 0  # …/synthetic_seed0.json  8:34, 3.1 GB
+.venv/bin/python scripts/validate.py synthetic --seed 1  # …/synthetic_seed1.json  8:40, 3.1 GB
+.venv/bin/python scripts/validate.py topology            # …/topology.json         5:23, 0.9 GB
+.venv/bin/python scripts/validate.py sweep               # …/sweep_summary.json    seconds
+.venv/bin/python scripts/validate.py decisions --jobs 8  # …/decisions.json        30:49, 2.1 GB
+.venv/bin/python scripts/run_mouse32.py --out results/mouse32_frozen   # frozen    3:11, 2.7 GB
+.venv/bin/python scripts/run_dandi000939.py --jobs 8     # results/dandi000939/   52:41, 4.0 GB
+.venv/bin/python scripts/run_synthetic_sweep.py --out results/sweep_frozen    # frozen 18:59, 1.3 GB
+</code></pre>
+<p>* The sweep and Mouse32 runs shared the machine with unrelated jobs (load average ~16 on 8
+cores), so their wall times are pessimistic.</p>
+<h2>9. What these results do not show</h2>
+<ul>
+<li><strong>ADn is still one animal and one session</strong> (19 units). The SWS result replicates across 22
+post-subiculum sessions (§7), but more ADn sessions need CRCNS th-1. Of each session's
+<code>.tar.gz</code> we need <code>*.res.N</code>, <code>*.clu.N</code>, <code>*.xml</code>, <code>*.ang</code> and <code>*.states.SWS/REM/Wake</code>, plus
+<code>docs/crcns_th-1_session_info.xls</code>. The open DANDI copy (000056) lacks sleep scoring and unit
+regions.</li>
+<li><strong>REM differs between datasets</strong> (above wake in Mouse32, equal in DANDI:000939), unexplained.</li>
+<li><strong>σ is quantised</strong> at a factor of 1.76 per grid step. Values are ± one step.</li>
+<li><strong>Posterior variance is not an absolute error bar</strong> on real data (§3.4).</li>
+<li><strong>Jump fraction is a lower bound</strong> (§4). A model with fitted ε is needed to quantify SWS
+discontinuities.</li>
+<li><strong>The density filter was adopted on Mouse32 alone.</strong> The pre-registered checks (§6.1) guard
+against false positives, but only other sessions can confirm it.</li>
+</ul>
+<footer>Static results snapshot · No external dependencies</footer></main></body></html>

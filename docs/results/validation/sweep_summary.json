@@ -1,0 +1,253 @@
+{
+  "config_hash": "9da486d98730",
+  "config": {
+    "n_cells": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "kappas": [
+      2,
+      4,
+      8
+    ],
+    "duration": 600,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_shuffles": 20,
+    "n_landmarks": 800,
+    "sigma_grid": [
+      0.1,
+      0.1759385099260072,
+      0.30954359274983734,
+      0.544606384655492,
+      0.9581723581247718,
+      1.685794169407609,
+      2.965961142075257,
+      5.218267838351593,
+      9.180942678743857,
+      16.152813746142794,
+      28.41901981608691,
+      50.0
+    ]
+  },
+  "table": [
+    {
+      "kappa": 2,
+      "n_cells": 8,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.20268029982498478,
+      "manifold_mae_sd": 0.0013198807180640922,
+      "decode_mae_mean": 0.18462432147459085,
+      "decode_mae_sd": 0.0013743890751656447,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 2.7229613645224298,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 161.73458448600044
+    },
+    {
+      "kappa": 2,
+      "n_cells": 16,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.17032783684115993,
+      "manifold_mae_sd": 0.0005424749596422276,
+      "decode_mae_mean": 0.15406015339234647,
+      "decode_mae_sd": 0.00051521596478594,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 5.0601180820549265,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 142.00734207966767
+    },
+    {
+      "kappa": 2,
+      "n_cells": 32,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.146559777095937,
+      "manifold_mae_sd": 0.0013026002090764906,
+      "decode_mae_mean": 0.12901078862389892,
+      "decode_mae_sd": 0.0007508667247954409,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 9.39823369760471,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 126.43141582433236
+    },
+    {
+      "kappa": 2,
+      "n_cells": 64,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.13598194539219474,
+      "manifold_mae_sd": 0.0007096897481125588,
+      "decode_mae_mean": 0.10886299292573594,
+      "decode_mae_sd": 1.309049506140066e-05,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 12.788789027155746,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 85.23682654899919
+    },
+    {
+      "kappa": 4,
+      "n_cells": 8,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.19363344256103587,
+      "manifold_mae_sd": 0.006184510213655167,
+      "decode_mae_mean": 0.16708583592750445,
+      "decode_mae_sd": 0.0014059803441894272,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 1.9361802375065862,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 126.16247863566726
+    },
+    {
+      "kappa": 4,
+      "n_cells": 16,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.15591077783710425,
+      "manifold_mae_sd": 0.0021082345329572105,
+      "decode_mae_mean": 0.13871944116376644,
+      "decode_mae_sd": 0.0001079979599848751,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 5.017026982900798,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 115.36634619366669
+    },
+    {
+      "kappa": 4,
+      "n_cells": 32,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.15356266807534683,
+      "manifold_mae_sd": 0.010501610437011985,
+      "decode_mae_mean": 0.1154824835501158,
+      "decode_mae_sd": 0.0011123917056438106,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 10.838521558794413,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 74.95480684333234
+    },
+    {
+      "kappa": 4,
+      "n_cells": 64,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.1370805744251071,
+      "manifold_mae_sd": 0.007015489422631935,
+      "decode_mae_mean": 0.09703117090014741,
+      "decode_mae_sd": 0.00040094643520011694,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 14.381917154238629,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 71.61801166799826
+    },
+    {
+      "kappa": 8,
+      "n_cells": 8,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.20610160836373415,
+      "manifold_mae_sd": 0.009330674077466692,
+      "decode_mae_mean": 0.15671185323343909,
+      "decode_mae_sd": 0.000529986437235309,
+      "is_ring_fraction": 0.0,
+      "ring_score_median": 1.0624362009678825,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 89.58500119466771
+    },
+    {
+      "kappa": 8,
+      "n_cells": 16,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.15826483942556158,
+      "manifold_mae_sd": 0.01105830220234943,
+      "decode_mae_mean": 0.12765565616729596,
+      "decode_mae_sd": 0.00048157406317619964,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 2.9606711621348354,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 100.42684211233306
+    },
+    {
+      "kappa": 8,
+      "n_cells": 32,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.1467382148559997,
+      "manifold_mae_sd": 0.004175644339839561,
+      "decode_mae_mean": 0.10589796613415263,
+      "decode_mae_sd": 0.0004344403868080581,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 6.9725943489923505,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 66.42885971299984
+    },
+    {
+      "kappa": 8,
+      "n_cells": 64,
+      "n_seeds": 3,
+      "manifold_mae_mean": 0.15669612954405063,
+      "manifold_mae_sd": 0.02450452552224574,
+      "decode_mae_mean": 0.08851781526005102,
+      "decode_mae_sd": 0.0003880132620730265,
+      "is_ring_fraction": 1.0,
+      "ring_score_median": 11.08500009333099,
+      "decode_sigma": [
+        0.9581723581247718,
+        0.9581723581247718,
+        0.9581723581247718
+      ],
+      "runtime_s_mean": 73.1400403460005
+    }
+  ],
+  "checks": {
+    "kappa=2 manifold_mae_mean non-increasing with cells": true,
+    "kappa=2 decode_mae_mean non-increasing with cells": true,
+    "kappa=4 manifold_mae_mean non-increasing with cells": true,
+    "kappa=4 decode_mae_mean non-increasing with cells": true,
+    "kappa=8 manifold_mae_mean non-increasing with cells": false,
+    "kappa=8 decode_mae_mean non-increasing with cells": true,
+    "decode_sigma within one grid step of true 1.0 (fraction)": 1.0
+  }
+}

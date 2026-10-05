@@ -1,0 +1,87 @@
+[000939] sub-A3701_ses-191119: units 102 ring True (1.32) MAE ring/hmm/head 0.420/0.332/0.236 sigma w/r/s 0.54/0.54/1.69 (201 s)
+[000939] sub-A3702_ses-191126: units 90 ring True (1.41) MAE ring/hmm/head 0.395/0.355/0.168 sigma w/r/s 0.54/0.54/1.69 (156 s)
+[000939] sub-A3703_ses-191215: units 103 ring False (1.16) MAE ring/hmm/head 0.402/0.359/0.208 sigma w/r/s 0.54/0.54/1.69 (202 s)
+[000939] sub-A3705_ses-200306: units 117 ring True (2.11) MAE ring/hmm/head 0.212/0.205/0.176 sigma w/r/s 0.54/0.54/2.97 (192 s)
+[000939] sub-A3706_ses-200313: units 126 ring True (2.78) MAE ring/hmm/head 0.329/0.318/0.157 sigma w/r/s 0.54/0.31/1.69 (126 s)
+[000939] sub-A3707_ses-200317: units 185 ring True (2.33) MAE ring/hmm/head 0.380/0.391/0.222 sigma w/r/s 0.54/0.54/2.97 (111 s)
+[000939] sub-A3708_ses-200317b: units 78 ring False (1.17) MAE ring/hmm/head 0.368/0.301/0.145 sigma w/r/s 0.54/0.54/2.97 (122 s)
+[000939] sub-A3709_ses-200601: units 64 ring True (2.35) MAE ring/hmm/head 0.596/0.529/0.182 sigma w/r/s 0.54/0.54/1.69 (141 s)
+[000939] sub-A3710_ses-200609: units 107 ring True (1.61) MAE ring/hmm/head 0.528/0.501/0.162 sigma w/r/s 0.54/0.54/0.96 (149 s)
+[000939] sub-A3711_ses-200810b: units 142 ring True (1.88) MAE ring/hmm/head 0.294/0.288/0.217 sigma w/r/s 0.54/0.31/0.96 (174 s)
+[000939] sub-A3712_ses-200903a: units 126 ring True (2.28) MAE ring/hmm/head 0.310/0.304/0.269 sigma w/r/s 0.54/0.54/2.97 (112 s)
+[000939] sub-A3713_ses-200909a: units 88 ring False (1.01) MAE ring/hmm/head 0.391/0.352/0.213 sigma w/r/s 0.54/0.54/1.69 (116 s)
+[000939] sub-A3716_ses-201015b: units 147 ring True (3.02) MAE ring/hmm/head 0.249/0.213/0.185 sigma w/r/s 0.54/0.54/1.69 (156 s)
+[000939] sub-A3717_ses-201021: units 98 ring True (3.71) MAE ring/hmm/head 0.325/0.308/0.184 sigma w/r/s 0.54/0.31/1.69 (150 s)
+[000939] sub-A3723_ses-201115: units 68 ring False (1.09) MAE ring/hmm/head 0.532/0.430/0.167 sigma w/r/s 0.54/0.31/0.18 (136 s)
+[000939] sub-A3728_ses-210309b: units 42 ring False (1.10) MAE ring/hmm/head 0.850/0.786/0.333 sigma w/r/s 0.96/nan/2.97 (79 s)
+[000939] sub-A3730_ses-210323b: units 77 ring False (1.17) MAE ring/hmm/head 0.626/0.577/0.189 sigma w/r/s 0.54/0.54/2.97 (107 s)
+[000939] sub-A5505_ses-200831: units 55 ring False (1.10) MAE ring/hmm/head 0.389/0.336/0.188 sigma w/r/s 0.54/0.54/1.69 (105 s)
+[000939] sub-A5506_ses-200914a: units 49 ring False (1.03) MAE ring/hmm/head 0.759/0.746/0.242 sigma w/r/s 0.96/0.54/2.97 (104 s)
+[000939] sub-A5507_ses-200920: units 96 ring True (1.63) MAE ring/hmm/head 0.488/0.460/0.191 sigma w/r/s 0.54/0.54/2.97 (109 s)
+[000939] sub-A5508_ses-200930: units 52 ring False (1.01) MAE ring/hmm/head 0.650/0.619/0.198 sigma w/r/s 0.96/0.96/2.97 (104 s)
+[000939] sub-A5801_ses-200924: units 46 ring False (1.02) MAE ring/hmm/head 0.588/0.498/0.230 sigma w/r/s 0.54/0.54/1.69 (111 s)
+{
+ "sessions": 22,
+ "ring_detected": 12,
+ "median_mae_rad": {
+  "ring_angle_mae_rad": 0.39846289084671405,
+  "hmm_ring_tuning_mae_rad": 0.3570495947983574,
+  "independent_ring_tuning_mae_rad": 0.568475015284768,
+  "hmm_head_tuning_mae_rad": 0.18971499456960972
+ },
+ "sigma_sws_gt_wake": {
+  "n": 22,
+  "greater": 21,
+  "equal": 0,
+  "less": 1,
+  "median_ratio": 3.095435927498374,
+  "wilcoxon_p_one_sided": 1.809063702431759e-05
+ },
+ "sigma_sws_gt_rem": {
+  "n": 20,
+  "greater": 19,
+  "equal": 0,
+  "less": 1,
+  "median_ratio": 3.095435927498374,
+  "wilcoxon_p_one_sided": 4.357613629140515e-05
+ },
+ "sigma_rem_vs_wake": {
+  "n": 20,
+  "greater": 0,
+  "equal": 15,
+  "less": 5,
+  "median_ratio": 1.0,
+  "wilcoxon_p_one_sided": 0.9830525732376554
+ },
+ "circvar_sws_gt_wake": {
+  "n": 22,
+  "greater": 21,
+  "equal": 0,
+  "less": 1,
+  "median_ratio": 6.497146479781834,
+  "wilcoxon_p_one_sided": 4.76837158203125e-07
+ }
+}
+	Command being timed: ".venv/bin/python scripts/run_dandi000939.py --jobs 8"
+	User time (seconds): 9949.03
+	System time (seconds): 661.05
+	Percent of CPU this job got: 335%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 52:40.95
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4044896
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 173114427
+	Voluntary context switches: 163582
+	Involuntary context switches: 1140546
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 11520
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

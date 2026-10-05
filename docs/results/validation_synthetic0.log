@@ -1,0 +1,26 @@
+[synthetic] wake: {"true_sigma": 1.0, "true_jump_rate": 0.0, "true_peak_rate": 30.0, "true_jump_fraction_20ms": 0.0, "decoded_sigma": 0.9581723581247718, "sigma_at_grid_edge": false, "decoded_jump_fraction": 0.0, "mean_circ_variance": 0.01362309891172856, "mae_rad": 0.1357950281241987, "hpd90_coverage": 0.9134, "hpd9
+[synthetic] rem: {"true_sigma": 1.0, "true_jump_rate": 0.0, "true_peak_rate": 30.0, "true_jump_fraction_20ms": 0.0, "decoded_sigma": 0.9581723581247718, "sigma_at_grid_edge": false, "decoded_jump_fraction": 0.0, "mean_circ_variance": 0.013685458892840185, "mae_rad": 0.13515834136686736, "hpd90_coverage": 0.915472, "
+[synthetic] sws: {"true_sigma": 4.0, "true_jump_rate": 0.3, "true_peak_rate": 26.0, "true_jump_fraction_20ms": 0.008617241149409961, "decoded_sigma": 2.965961142075257, "sigma_at_grid_edge": false, "decoded_jump_fraction": 0.00035502366824454964, "mean_circ_variance": 0.04881394357816774, "mae_rad": 0.31494003033419
+	Command being timed: ".venv/bin/python scripts/validate.py synthetic --seed 0"
+	User time (seconds): 576.24
+	System time (seconds): 86.44
+	Percent of CPU this job got: 128%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 8:34.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3070520
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 322
+	Minor (reclaiming a frame) page faults: 25211431
+	Voluntary context switches: 12097
+	Involuntary context switches: 37246
+	Swaps: 0
+	File system inputs: 1236912
+	File system outputs: 584
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

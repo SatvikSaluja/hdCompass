@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hdcompass — Results</title>
+<style>
+:root{color-scheme:light;--ink:#1e2933;--muted:#53616c;--rule:#dce2e6;--accent:#175b49}*{box-sizing:border-box}body{margin:0;background:#fafbf9;color:var(--ink);font:16px/1.65 system-ui,sans-serif}main{max-width:1140px;margin:auto;padding:42px 24px 64px}header{border-bottom:2px solid var(--ink);padding-bottom:24px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.2;margin:8px 0 16px;letter-spacing:-.035em}h2{font-size:1.65rem;margin:0 0 8px}h3{font-size:1.1rem;margin:28px 0 8px}p{max-width:850px}a{color:#165e79;text-underline-offset:3px}nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}.meta,small,caption{color:var(--muted);font-size:.88rem}section{padding:34px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}.verdict{border-left:3px solid var(--accent);padding:9px 18px;background:#eef5f0;margin:18px 0}.limit{border-left-color:#976722;background:#faf3e8}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:14px 0 22px;font-variant-numeric:tabular-nums}caption{text-align:left;margin-bottom:10px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}th{background:#edf0ed;white-space:normal}td{white-space:nowrap}details{margin:20px 0}summary{cursor:pointer;font-weight:600}li{margin:7px 0}.source-list{columns:2;overflow-wrap:anywhere}footer{font-size:.88rem;color:var(--muted);padding-top:22px}@media(max-width:650px){main{padding:24px 16px}.source-list{columns:1}th,td{padding:8px}section{padding:26px 0}}@media print{body{background:white}main{max-width:none;padding:0}.scroll{overflow:visible}table{font-size:8pt}nav{display:none}details>*{display:block}.source-list{columns:1}}
+
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="meta">RESEARCH RESULTS · STATIC SNAPSHOT</div>
+  <h1>hdcompass</h1>
+  <p>Recovering the head-direction compass from spikes alone, and comparing its dynamics across wake and sleep.</p>
+  <p class="meta">Results recorded 27 Sep 2026 · Summary of the project's written report</p>
+  <nav aria-label="Page sections"><a href="#results">Results</a><a href="#validation">Validation</a><a href="#terms">Reading the scores</a><a href="#sources">Source records</a></nav>
+</header>
+<section id="results">
+  <h2>Head direction without behavioural labels</h2>
+  <p>The pipeline finds a ring-shaped representation of neural activity, estimates tuning from that ring, and uses a hidden Markov model (HMM) to decode the internal compass. Tracked head angle is used for validation and for the supervised reference decoder.</p>
+  <div class="verdict"><strong>Positive finding:</strong> the label-free HMM reaches 0.406 rad held-out error in Mouse32 and a median 0.36 rad across 22 post-subiculum sessions. SWS diffusion exceeds wake in 21 of those 22 sessions.</div>
+  <div class="verdict limit"><strong>Boundary:</strong> ring detection is less reliable than decoding, real-data posteriors are overconfident, and the REM–wake difference does not replicate across datasets.</div>
+  <h3>Wake decoding</h3>
+  <div class="scroll"><table>
+    <caption>Mouse32-140822: 19 ADn units above the 1 Hz wake-rate floor; held-out evaluation uses two folds of 60-second blocks. Post-subiculum values are medians over 22 DANDI:000939 sessions.</caption>
+    <thead><tr><th scope="col">Estimate</th><th scope="col">Mouse32 held-out MAE (rad) ↓</th><th scope="col">Post-subiculum median MAE (rad) ↓</th></tr></thead>
+    <tbody>
+      <tr><td>Unsupervised ring angle</td><td>0.420</td><td>0.40</td></tr>
+      <tr><td>Label-free HMM</td><td>0.406</td><td>0.36</td></tr>
+      <tr><td>Independent-bin decoder, ring tuning</td><td>0.581</td><td>0.57</td></tr>
+      <tr><td>HMM with tracked-angle tuning</td><td>0.207</td><td>0.19</td></tr>
+    </tbody>
+  </table></div>
+  <p class="meta">Random-angle chance MAE is approximately 1.57 rad. The tracked-angle model is a supervised reference. The label-free HMM beats the independent-bin decoder in all 22 post-subiculum sessions.</p>
+  <h3>Compass dynamics across states</h3>
+  <div class="scroll"><table>
+    <caption>Mouse32 label-free decoding; wake 1,958.9 s, REM 2,565 s, SWS 12,402 s.</caption>
+    <thead><tr><th scope="col">State</th><th scope="col">σ (rad/√s)</th><th scope="col">Median |speed| (rad/s)</th><th scope="col">Mean circular variance</th></tr></thead>
+    <tbody><tr><td>Wake</td><td>0.545</td><td>0.66</td><td>0.0058</td></tr><tr><td>REM</td><td>0.958</td><td>1.26</td><td>0.0137</td></tr><tr><td>SWS</td><td>2.966</td><td>5.16</td><td>0.0676</td></tr></tbody>
+  </table></div>
+  <p>The decoded compass moves faster and is less certain in SWS. Uniformly rescaling sleep tuning by the population firing-rate change leaves σ unchanged and worsens likelihood; per-cell rate changes were not tested.</p>
+  <h3>Replication in post-subiculum</h3>
+  <div class="scroll"><table>
+    <caption>Analysis plan fixed before the 22 sessions were analysed. REM comparisons include only the 20 sessions with at least 60 seconds of REM.</caption>
+    <thead><tr><th scope="col">Comparison</th><th scope="col">Sessions in predicted direction</th><th scope="col">Median ratio</th><th scope="col">One-sided paired Wilcoxon p</th></tr></thead>
+    <tbody><tr><td>σ SWS &gt; wake</td><td>21/22</td><td>3.1×</td><td>1.8 × 10⁻⁵</td></tr><tr><td>σ SWS &gt; REM</td><td>19/20</td><td>3.1×</td><td>4.4 × 10⁻⁵</td></tr><tr><td>Circular variance SWS &gt; wake</td><td>21/22</td><td>6.5×</td><td>4.8 × 10⁻⁷</td></tr></tbody>
+  </table></div>
+  <p>REM σ equals wake at grid resolution in 15 of 20 sessions and is lower in five. The higher REM σ seen in Mouse32 is therefore not a general result across these datasets.</p>
+</section>
+<section id="validation">
+  <h2>Validation and limitations</h2>
+  <h3>Detecting the ring</h3>
+  <div class="scroll"><table>
+    <caption>Topology outcomes reported for the original and frozen density-filtered tests.</caption>
+    <thead><tr><th scope="col">Evaluation</th><th scope="col">Original test</th><th scope="col">Density-filtered test</th></tr></thead>
+    <tbody><tr><td>Mouse32 full wake</td><td>No ring; score 1.04, p = 0.48</td><td>Ring; score 4.92, p = 1/201</td></tr><tr><td>Synthetic sweep</td><td>33/36 configurations</td><td>36/36 configurations</td></tr><tr><td>Post-subiculum</td><td>—</td><td>12/22 sessions</td></tr></tbody>
+  </table></div>
+  <p>The density filter was explored after the initial Mouse32 failure, then adopted through checks with fixed decision rules before analysing the second dataset. Its success is not universal; the short 120-second smoke slice also misses the ring with the filter.</p>
+  <h3>Ground-truth simulations</h3>
+  <p>Two 17,000-second synthetic sessions put label-free decoding within 0.012 rad of a true-model decoder in every state. Wake and REM σ are recovered to the nearest grid point. Synthetic wake/REM 90% posterior sets cover roughly 90–92% of true angles; coverage falls to about 82% in SWS with jumps.</p>
+  <div class="verdict limit"><strong>Uncertainty:</strong> on held-out real wake with tracked-angle tuning, nominal 90% posterior sets cover only 64% of true angles. Use posterior variance as a relative measure across states, not an absolute error bar.</div>
+  <details><summary>Remaining limits</summary><ul>
+    <li>ADn evidence comes from one animal and one session; the 22-session replication is in a different brain region.</li>
+    <li>σ is fitted on a coarse grid with a factor of 1.76 between adjacent values.</li>
+    <li>Jump probability is fixed at zero. Decoded jump counts underestimate synthetic SWS jumps by about 20×.</li>
+    <li>Sleep decoding uses wake tuning; non-uniform changes in firing rates or tuning width remain untested.</li>
+  </ul></details>
+</section>
+<section id="terms">
+  <h2>Reading the scores</h2>
+  <dl>
+    <dt><strong>Circular MAE</strong></dt><dd>Mean shortest angular distance between estimated and tracked heading. Lower is better; 0.406 rad is about 23°.</dd>
+    <dt><strong>σ</strong></dt><dd>Fitted diffusion scale of the latent compass, in radians per square root second. Higher values indicate faster modelled diffusion.</dd>
+    <dt><strong>Circular variance</strong></dt><dd>Spread of the decoded angular posterior. Larger values indicate less concentrated estimates.</dd>
+    <dt><strong>Ring score</strong></dt><dd>Ratio of the longest to the second-longest persistent H1 lifetime, assessed against shuffled data.</dd>
+    <dt><strong>REM / SWS</strong></dt><dd>Rapid-eye-movement sleep / slow-wave sleep.</dd>
+  </dl>
+</section>
+<section id="sources">
+  <h2>Source records</h2>
+  <p>All values above are taken from this project's recorded results; no analyses were rerun to build this page.</p>
+  <ul><li><a href="RESULTS.md">Full results, per-session tables and reproduction commands</a></li><li><a href="README.md">Project overview and run guide</a></li><li><a href="scripts/validate.py">Validation checks and decision rules</a></li><li><a href="scripts/run_dandi000939.py">Second-dataset analysis</a></li></ul>
+</section>
+<footer>Plain HTML and CSS · No external dependencies</footer>
+</main>
+</body>
+</html>

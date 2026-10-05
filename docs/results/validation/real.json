@@ -1,0 +1,120 @@
+{
+  "held_out_folds": [
+    {
+      "ring_angle_mae_rad": 0.41705894630041096,
+      "hmm_ring_tuning_mae_rad": 0.40982944042908653,
+      "independent_ring_tuning_mae_rad": 0.5910765284257079,
+      "hmm_head_tuning_mae_rad": 0.20621647818373995,
+      "hmm_head_tuning_hpd90_coverage": 0.6370625,
+      "hmm_head_tuning_hpd90_width_rad": 0.4318839050675618,
+      "hmm_head_tuning_mean_circ_variance": 0.006717134577131321,
+      "sigma_ring_train": 0.544606384655492,
+      "sigma_head_train": 0.544606384655492
+    },
+    {
+      "ring_angle_mae_rad": 0.42207197226357207,
+      "hmm_ring_tuning_mae_rad": 0.40258437255677243,
+      "independent_ring_tuning_mae_rad": 0.5709168692549128,
+      "hmm_head_tuning_mae_rad": 0.20852966120666247,
+      "hmm_head_tuning_hpd90_coverage": 0.6481789239733295,
+      "hmm_head_tuning_hpd90_width_rad": 0.43036730789230293,
+      "hmm_head_tuning_mean_circ_variance": 0.006917857662760671,
+      "sigma_ring_train": 0.544606384655492,
+      "sigma_head_train": 0.544606384655492
+    }
+  ],
+  "held_out_mean": {
+    "ring_angle_mae_rad": 0.4195654592819915,
+    "hmm_ring_tuning_mae_rad": 0.40620690649292945,
+    "independent_ring_tuning_mae_rad": 0.5809966988403104,
+    "hmm_head_tuning_mae_rad": 0.2073730696952012,
+    "hmm_head_tuning_hpd90_coverage": 0.6426207119866647,
+    "hmm_head_tuning_hpd90_width_rad": 0.43112560647993237,
+    "hmm_head_tuning_mean_circ_variance": 0.006817496119945996,
+    "sigma_ring_train": 0.544606384655492,
+    "sigma_head_train": 0.544606384655492
+  },
+  "in_sample": {
+    "hmm_ring_tuning_mae_rad": 0.4008748893483261,
+    "independent_ring_tuning_mae_rad": 0.5755903031486427,
+    "hmm_head_tuning_mae_rad": 0.20460352914662103,
+    "align": {
+      "sign": 1,
+      "offset": 1.4534154009906977
+    },
+    "ring_angle_mae_rad": 0.4166508665239372
+  },
+  "gain": {
+    "rem": {
+      "gain_vs_wake": 0.863755619580027,
+      "uncorrected": {
+        "sigma": 0.9581723581247718,
+        "eps": 0.0,
+        "median_abs_speed": 1.2625356214836252,
+        "jump_fraction": 0.00012478455167250294,
+        "mean_circ_variance": 0.013741997277291081,
+        "n_bins": 128250
+      },
+      "corrected": {
+        "sigma": 0.9581723581247718,
+        "sigma_at_grid_edge": false,
+        "jump_fraction": 0.00010138744823390865,
+        "mean_circ_variance": 0.01374612538360878,
+        "loglik": -748239.869666574
+      },
+      "uncorrected_loglik": -746862.3562012715
+    },
+    "sws": {
+      "gain_vs_wake": 0.7625583945877666,
+      "uncorrected": {
+        "sigma": 2.965961142075257,
+        "eps": 0.0,
+        "median_abs_speed": 5.155387579731155,
+        "jump_fraction": 0.0018707987665630202,
+        "mean_circ_variance": 0.0676087400081548,
+        "n_bins": 620100
+      },
+      "corrected": {
+        "sigma": 2.965961142075257,
+        "sigma_at_grid_edge": false,
+        "jump_fraction": 0.0020869082792521966,
+        "mean_circ_variance": 0.07457477969100205,
+        "loglik": -3607142.8376408257
+      },
+      "uncorrected_loglik": -3594822.611059257
+    }
+  },
+  "sigma_at_grid_edge": {
+    "wake": false,
+    "rem": false,
+    "sws": false
+  },
+  "isomap_robustness": [
+    {
+      "n_neighbors": 10,
+      "seed": 0,
+      "ring_angle_mae_rad": 0.41656904380371385
+    },
+    {
+      "n_neighbors": 15,
+      "seed": 0,
+      "ring_angle_mae_rad": 0.416650866523937
+    },
+    {
+      "n_neighbors": 30,
+      "seed": 0,
+      "ring_angle_mae_rad": 0.4138050491226319
+    },
+    {
+      "n_neighbors": 15,
+      "seed": 1,
+      "ring_angle_mae_rad": 0.4386271593849248
+    },
+    {
+      "n_neighbors": 15,
+      "seed": 2,
+      "ring_angle_mae_rad": 0.40983141601247325
+    }
+  ],
+  "runtime_s": 200.49745026500023
+}

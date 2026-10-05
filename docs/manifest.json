@@ -1,0 +1,650 @@
+[
+  {
+    "path": "results/dandi000939/sub-A3701_ses-191119/barcode.png",
+    "bytes": 16390
+  },
+  {
+    "path": "results/dandi000939/sub-A3701_ses-191119/decode_wake.png",
+    "bytes": 62935
+  },
+  {
+    "path": "results/dandi000939/sub-A3701_ses-191119/dynamics.png",
+    "bytes": 34930
+  },
+  {
+    "path": "results/dandi000939/sub-A3701_ses-191119/report.json",
+    "bytes": 2217
+  },
+  {
+    "path": "results/dandi000939/sub-A3701_ses-191119/ring.png",
+    "bytes": 77733
+  },
+  {
+    "path": "results/dandi000939/sub-A3702_ses-191126/barcode.png",
+    "bytes": 18575
+  },
+  {
+    "path": "results/dandi000939/sub-A3702_ses-191126/decode_wake.png",
+    "bytes": 55533
+  },
+  {
+    "path": "results/dandi000939/sub-A3702_ses-191126/dynamics.png",
+    "bytes": 33831
+  },
+  {
+    "path": "results/dandi000939/sub-A3702_ses-191126/report.json",
+    "bytes": 2187
+  },
+  {
+    "path": "results/dandi000939/sub-A3702_ses-191126/ring.png",
+    "bytes": 155731
+  },
+  {
+    "path": "results/dandi000939/sub-A3703_ses-191215/barcode.png",
+    "bytes": 17650
+  },
+  {
+    "path": "results/dandi000939/sub-A3703_ses-191215/decode_wake.png",
+    "bytes": 64789
+  },
+  {
+    "path": "results/dandi000939/sub-A3703_ses-191215/dynamics.png",
+    "bytes": 34153
+  },
+  {
+    "path": "results/dandi000939/sub-A3703_ses-191215/report.json",
+    "bytes": 2213
+  },
+  {
+    "path": "results/dandi000939/sub-A3703_ses-191215/ring.png",
+    "bytes": 125671
+  },
+  {
+    "path": "results/dandi000939/sub-A3705_ses-200306/barcode.png",
+    "bytes": 15687
+  },
+  {
+    "path": "results/dandi000939/sub-A3705_ses-200306/decode_wake.png",
+    "bytes": 55148
+  },
+  {
+    "path": "results/dandi000939/sub-A3705_ses-200306/dynamics.png",
+    "bytes": 37264
+  },
+  {
+    "path": "results/dandi000939/sub-A3705_ses-200306/report.json",
+    "bytes": 2226
+  },
+  {
+    "path": "results/dandi000939/sub-A3705_ses-200306/ring.png",
+    "bytes": 146637
+  },
+  {
+    "path": "results/dandi000939/sub-A3706_ses-200313/barcode.png",
+    "bytes": 15232
+  },
+  {
+    "path": "results/dandi000939/sub-A3706_ses-200313/decode_wake.png",
+    "bytes": 60067
+  },
+  {
+    "path": "results/dandi000939/sub-A3706_ses-200313/dynamics.png",
+    "bytes": 33878
+  },
+  {
+    "path": "results/dandi000939/sub-A3706_ses-200313/report.json",
+    "bytes": 2209
+  },
+  {
+    "path": "results/dandi000939/sub-A3706_ses-200313/ring.png",
+    "bytes": 132586
+  },
+  {
+    "path": "results/dandi000939/sub-A3707_ses-200317/barcode.png",
+    "bytes": 15033
+  },
+  {
+    "path": "results/dandi000939/sub-A3707_ses-200317/decode_wake.png",
+    "bytes": 56578
+  },
+  {
+    "path": "results/dandi000939/sub-A3707_ses-200317/dynamics.png",
+    "bytes": 35860
+  },
+  {
+    "path": "results/dandi000939/sub-A3707_ses-200317/report.json",
+    "bytes": 2202
+  },
+  {
+    "path": "results/dandi000939/sub-A3707_ses-200317/ring.png",
+    "bytes": 156312
+  },
+  {
+    "path": "results/dandi000939/sub-A3708_ses-200317b/barcode.png",
+    "bytes": 18120
+  },
+  {
+    "path": "results/dandi000939/sub-A3708_ses-200317b/decode_wake.png",
+    "bytes": 54551
+  },
+  {
+    "path": "results/dandi000939/sub-A3708_ses-200317b/dynamics.png",
+    "bytes": 37621
+  },
+  {
+    "path": "results/dandi000939/sub-A3708_ses-200317b/report.json",
+    "bytes": 2199
+  },
+  {
+    "path": "results/dandi000939/sub-A3708_ses-200317b/ring.png",
+    "bytes": 149244
+  },
+  {
+    "path": "results/dandi000939/sub-A3709_ses-200601/barcode.png",
+    "bytes": 16658
+  },
+  {
+    "path": "results/dandi000939/sub-A3709_ses-200601/decode_wake.png",
+    "bytes": 51784
+  },
+  {
+    "path": "results/dandi000939/sub-A3709_ses-200601/dynamics.png",
+    "bytes": 32226
+  },
+  {
+    "path": "results/dandi000939/sub-A3709_ses-200601/report.json",
+    "bytes": 2219
+  },
+  {
+    "path": "results/dandi000939/sub-A3709_ses-200601/ring.png",
+    "bytes": 115488
+  },
+  {
+    "path": "results/dandi000939/sub-A3710_ses-200609/barcode.png",
+    "bytes": 18550
+  },
+  {
+    "path": "results/dandi000939/sub-A3710_ses-200609/decode_wake.png",
+    "bytes": 58421
+  },
+  {
+    "path": "results/dandi000939/sub-A3710_ses-200609/dynamics.png",
+    "bytes": 38169
+  },
+  {
+    "path": "results/dandi000939/sub-A3710_ses-200609/report.json",
+    "bytes": 2203
+  },
+  {
+    "path": "results/dandi000939/sub-A3710_ses-200609/ring.png",
+    "bytes": 119849
+  },
+  {
+    "path": "results/dandi000939/sub-A3711_ses-200810b/barcode.png",
+    "bytes": 16093
+  },
+  {
+    "path": "results/dandi000939/sub-A3711_ses-200810b/decode_wake.png",
+    "bytes": 58035
+  },
+  {
+    "path": "results/dandi000939/sub-A3711_ses-200810b/dynamics.png",
+    "bytes": 38308
+  },
+  {
+    "path": "results/dandi000939/sub-A3711_ses-200810b/report.json",
+    "bytes": 2226
+  },
+  {
+    "path": "results/dandi000939/sub-A3711_ses-200810b/ring.png",
+    "bytes": 151947
+  },
+  {
+    "path": "results/dandi000939/sub-A3712_ses-200903a/barcode.png",
+    "bytes": 15300
+  },
+  {
+    "path": "results/dandi000939/sub-A3712_ses-200903a/decode_wake.png",
+    "bytes": 53956
+  },
+  {
+    "path": "results/dandi000939/sub-A3712_ses-200903a/dynamics.png",
+    "bytes": 36667
+  },
+  {
+    "path": "results/dandi000939/sub-A3712_ses-200903a/report.json",
+    "bytes": 2205
+  },
+  {
+    "path": "results/dandi000939/sub-A3712_ses-200903a/ring.png",
+    "bytes": 134498
+  },
+  {
+    "path": "results/dandi000939/sub-A3713_ses-200909a/barcode.png",
+    "bytes": 18786
+  },
+  {
+    "path": "results/dandi000939/sub-A3713_ses-200909a/decode_wake.png",
+    "bytes": 64586
+  },
+  {
+    "path": "results/dandi000939/sub-A3713_ses-200909a/dynamics.png",
+    "bytes": 33508
+  },
+  {
+    "path": "results/dandi000939/sub-A3713_ses-200909a/report.json",
+    "bytes": 2202
+  },
+  {
+    "path": "results/dandi000939/sub-A3713_ses-200909a/ring.png",
+    "bytes": 139509
+  },
+  {
+    "path": "results/dandi000939/sub-A3716_ses-201015b/barcode.png",
+    "bytes": 15533
+  },
+  {
+    "path": "results/dandi000939/sub-A3716_ses-201015b/decode_wake.png",
+    "bytes": 60431
+  },
+  {
+    "path": "results/dandi000939/sub-A3716_ses-201015b/dynamics.png",
+    "bytes": 33629
+  },
+  {
+    "path": "results/dandi000939/sub-A3716_ses-201015b/report.json",
+    "bytes": 2209
+  },
+  {
+    "path": "results/dandi000939/sub-A3716_ses-201015b/ring.png",
+    "bytes": 140750
+  },
+  {
+    "path": "results/dandi000939/sub-A3717_ses-201021/barcode.png",
+    "bytes": 15186
+  },
+  {
+    "path": "results/dandi000939/sub-A3717_ses-201021/decode_wake.png",
+    "bytes": 59777
+  },
+  {
+    "path": "results/dandi000939/sub-A3717_ses-201021/dynamics.png",
+    "bytes": 33670
+  },
+  {
+    "path": "results/dandi000939/sub-A3717_ses-201021/report.json",
+    "bytes": 2212
+  },
+  {
+    "path": "results/dandi000939/sub-A3717_ses-201021/ring.png",
+    "bytes": 149722
+  },
+  {
+    "path": "results/dandi000939/sub-A3723_ses-201115/barcode.png",
+    "bytes": 17428
+  },
+  {
+    "path": "results/dandi000939/sub-A3723_ses-201115/decode_wake.png",
+    "bytes": 63902
+  },
+  {
+    "path": "results/dandi000939/sub-A3723_ses-201115/dynamics.png",
+    "bytes": 37932
+  },
+  {
+    "path": "results/dandi000939/sub-A3723_ses-201115/report.json",
+    "bytes": 2228
+  },
+  {
+    "path": "results/dandi000939/sub-A3723_ses-201115/ring.png",
+    "bytes": 117876
+  },
+  {
+    "path": "results/dandi000939/sub-A3728_ses-210309b/barcode.png",
+    "bytes": 16446
+  },
+  {
+    "path": "results/dandi000939/sub-A3728_ses-210309b/decode_wake.png",
+    "bytes": 66922
+  },
+  {
+    "path": "results/dandi000939/sub-A3728_ses-210309b/dynamics.png",
+    "bytes": 32632
+  },
+  {
+    "path": "results/dandi000939/sub-A3728_ses-210309b/report.json",
+    "bytes": 1926
+  },
+  {
+    "path": "results/dandi000939/sub-A3728_ses-210309b/ring.png",
+    "bytes": 110848
+  },
+  {
+    "path": "results/dandi000939/sub-A3730_ses-210323b/barcode.png",
+    "bytes": 17211
+  },
+  {
+    "path": "results/dandi000939/sub-A3730_ses-210323b/decode_wake.png",
+    "bytes": 60189
+  },
+  {
+    "path": "results/dandi000939/sub-A3730_ses-210323b/dynamics.png",
+    "bytes": 38262
+  },
+  {
+    "path": "results/dandi000939/sub-A3730_ses-210323b/report.json",
+    "bytes": 2212
+  },
+  {
+    "path": "results/dandi000939/sub-A3730_ses-210323b/ring.png",
+    "bytes": 140088
+  },
+  {
+    "path": "results/dandi000939/sub-A5505_ses-200831/barcode.png",
+    "bytes": 17074
+  },
+  {
+    "path": "results/dandi000939/sub-A5505_ses-200831/decode_wake.png",
+    "bytes": 64243
+  },
+  {
+    "path": "results/dandi000939/sub-A5505_ses-200831/dynamics.png",
+    "bytes": 34397
+  },
+  {
+    "path": "results/dandi000939/sub-A5505_ses-200831/report.json",
+    "bytes": 2204
+  },
+  {
+    "path": "results/dandi000939/sub-A5505_ses-200831/ring.png",
+    "bytes": 137136
+  },
+  {
+    "path": "results/dandi000939/sub-A5506_ses-200914a/barcode.png",
+    "bytes": 16760
+  },
+  {
+    "path": "results/dandi000939/sub-A5506_ses-200914a/decode_wake.png",
+    "bytes": 65770
+  },
+  {
+    "path": "results/dandi000939/sub-A5506_ses-200914a/dynamics.png",
+    "bytes": 36509
+  },
+  {
+    "path": "results/dandi000939/sub-A5506_ses-200914a/report.json",
+    "bytes": 2212
+  },
+  {
+    "path": "results/dandi000939/sub-A5506_ses-200914a/ring.png",
+    "bytes": 92327
+  },
+  {
+    "path": "results/dandi000939/sub-A5507_ses-200920/barcode.png",
+    "bytes": 17281
+  },
+  {
+    "path": "results/dandi000939/sub-A5507_ses-200920/decode_wake.png",
+    "bytes": 55076
+  },
+  {
+    "path": "results/dandi000939/sub-A5507_ses-200920/dynamics.png",
+    "bytes": 35447
+  },
+  {
+    "path": "results/dandi000939/sub-A5507_ses-200920/report.json",
+    "bytes": 2220
+  },
+  {
+    "path": "results/dandi000939/sub-A5507_ses-200920/ring.png",
+    "bytes": 155442
+  },
+  {
+    "path": "results/dandi000939/sub-A5508_ses-200930/barcode.png",
+    "bytes": 18233
+  },
+  {
+    "path": "results/dandi000939/sub-A5508_ses-200930/decode_wake.png",
+    "bytes": 62636
+  },
+  {
+    "path": "results/dandi000939/sub-A5508_ses-200930/dynamics.png",
+    "bytes": 36026
+  },
+  {
+    "path": "results/dandi000939/sub-A5508_ses-200930/report.json",
+    "bytes": 2189
+  },
+  {
+    "path": "results/dandi000939/sub-A5508_ses-200930/ring.png",
+    "bytes": 111584
+  },
+  {
+    "path": "results/dandi000939/sub-A5801_ses-200924/barcode.png",
+    "bytes": 17041
+  },
+  {
+    "path": "results/dandi000939/sub-A5801_ses-200924/decode_wake.png",
+    "bytes": 64593
+  },
+  {
+    "path": "results/dandi000939/sub-A5801_ses-200924/dynamics.png",
+    "bytes": 33881
+  },
+  {
+    "path": "results/dandi000939/sub-A5801_ses-200924/report.json",
+    "bytes": 2202
+  },
+  {
+    "path": "results/dandi000939/sub-A5801_ses-200924/ring.png",
+    "bytes": 135061
+  },
+  {
+    "path": "results/dandi000939/summary.json",
+    "bytes": 28092
+  },
+  {
+    "path": "results/dandi000939/summary.png",
+    "bytes": 128321
+  },
+  {
+    "path": "results/dandi000939.log",
+    "bytes": 4558
+  },
+  {
+    "path": "results/mouse32/barcode.png",
+    "bytes": 17179
+  },
+  {
+    "path": "results/mouse32/decode_wake.png",
+    "bytes": 57384
+  },
+  {
+    "path": "results/mouse32/dynamics.png",
+    "bytes": 33034
+  },
+  {
+    "path": "results/mouse32/report.json",
+    "bytes": 2058
+  },
+  {
+    "path": "results/mouse32/ring.png",
+    "bytes": 122018
+  },
+  {
+    "path": "results/mouse32.log",
+    "bytes": 1028
+  },
+  {
+    "path": "results/mouse32_frozen/barcode.png",
+    "bytes": 17374
+  },
+  {
+    "path": "results/mouse32_frozen/decode_wake.png",
+    "bytes": 57384
+  },
+  {
+    "path": "results/mouse32_frozen/dynamics.png",
+    "bytes": 33034
+  },
+  {
+    "path": "results/mouse32_frozen/report.json",
+    "bytes": 2202
+  },
+  {
+    "path": "results/mouse32_frozen/ring.png",
+    "bytes": 122018
+  },
+  {
+    "path": "results/mouse32_frozen.log",
+    "bytes": 1070
+  },
+  {
+    "path": "results/sweep/report.json",
+    "bytes": 12551
+  },
+  {
+    "path": "results/sweep/sweep.png",
+    "bytes": 58175
+  },
+  {
+    "path": "results/sweep.log",
+    "bytes": 836
+  },
+  {
+    "path": "results/sweep_frozen/report.json",
+    "bytes": 12636
+  },
+  {
+    "path": "results/sweep_frozen/sweep.png",
+    "bytes": 58175
+  },
+  {
+    "path": "results/sweep_frozen.log",
+    "bytes": 870
+  },
+  {
+    "path": "results/validation/decisions.json",
+    "bytes": 9122
+  },
+  {
+    "path": "results/validation/real.json",
+    "bytes": 3732
+  },
+  {
+    "path": "results/validation/sweep_summary.json",
+    "bytes": 7007
+  },
+  {
+    "path": "results/validation/synthetic_seed0/barcode.png",
+    "bytes": 17047
+  },
+  {
+    "path": "results/validation/synthetic_seed0/decode_wake.png",
+    "bytes": 66171
+  },
+  {
+    "path": "results/validation/synthetic_seed0/dynamics.png",
+    "bytes": 33938
+  },
+  {
+    "path": "results/validation/synthetic_seed0/report.json",
+    "bytes": 2031
+  },
+  {
+    "path": "results/validation/synthetic_seed0/ring.png",
+    "bytes": 94158
+  },
+  {
+    "path": "results/validation/synthetic_seed0.json",
+    "bytes": 3846
+  },
+  {
+    "path": "results/validation/synthetic_seed0.png",
+    "bytes": 53329
+  },
+  {
+    "path": "results/validation/synthetic_seed1/barcode.png",
+    "bytes": 16591
+  },
+  {
+    "path": "results/validation/synthetic_seed1/decode_wake.png",
+    "bytes": 66033
+  },
+  {
+    "path": "results/validation/synthetic_seed1/dynamics.png",
+    "bytes": 33997
+  },
+  {
+    "path": "results/validation/synthetic_seed1/report.json",
+    "bytes": 2029
+  },
+  {
+    "path": "results/validation/synthetic_seed1/ring.png",
+    "bytes": 92030
+  },
+  {
+    "path": "results/validation/synthetic_seed1.json",
+    "bytes": 3858
+  },
+  {
+    "path": "results/validation/synthetic_seed1.png",
+    "bytes": 53131
+  },
+  {
+    "path": "results/validation/topology.json",
+    "bytes": 1412
+  },
+  {
+    "path": "results/validation_decisions.log",
+    "bytes": 8040
+  },
+  {
+    "path": "results/validation_real.log",
+    "bytes": 3306
+  },
+  {
+    "path": "results/validation_synthetic0.log",
+    "bytes": 1753
+  },
+  {
+    "path": "results/validation_synthetic1.log",
+    "bytes": 1744
+  },
+  {
+    "path": "results/validation_topology.log",
+    "bytes": 2042
+  },
+  {
+    "path": "figures/quick/mouse32/barcode.png",
+    "bytes": 16491
+  },
+  {
+    "path": "figures/quick/mouse32/decode_wake.png",
+    "bytes": 62210
+  },
+  {
+    "path": "figures/quick/mouse32/dynamics.png",
+    "bytes": 33492
+  },
+  {
+    "path": "figures/quick/mouse32/report.json",
+    "bytes": 1798
+  },
+  {
+    "path": "figures/quick/mouse32/ring.png",
+    "bytes": 66081
+  },
+  {
+    "path": "figures/quick/sweep/report.json",
+    "bytes": 734
+  },
+  {
+    "path": "figures/quick/sweep/sweep.png",
+    "bytes": 22468
+  },
+  {
+    "path": "figures/quick/sweep.png",
+    "bytes": 22468
+  }
+]

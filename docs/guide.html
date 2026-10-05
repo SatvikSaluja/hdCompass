@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Project and run guide — hdcompass</title><style>
+:root{color-scheme:light;--ink:#1e2933;--muted:#53616c;--rule:#dce2e6;--accent:#175b49}*{box-sizing:border-box}body{margin:0;background:#fafbf9;color:var(--ink);font:16px/1.65 system-ui,sans-serif}main{max-width:1140px;margin:auto;padding:42px 24px 64px}header{border-bottom:2px solid var(--ink);padding-bottom:24px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.2;margin:8px 0 16px;letter-spacing:-.035em}h2{font-size:1.65rem;margin:0 0 8px}h3{font-size:1.1rem;margin:28px 0 8px}p{max-width:850px}a{color:#165e79;text-underline-offset:3px}nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}.meta,small,caption{color:var(--muted);font-size:.88rem}section{padding:34px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}.verdict{border-left:3px solid var(--accent);padding:9px 18px;background:#eef5f0;margin:18px 0}.limit{border-left-color:#976722;background:#faf3e8}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:14px 0 22px;font-variant-numeric:tabular-nums}caption{text-align:left;margin-bottom:10px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}th{background:#edf0ed;white-space:normal}td{white-space:nowrap}details{margin:20px 0}summary{cursor:pointer;font-weight:600}li{margin:7px 0}.source-list{columns:2;overflow-wrap:anywhere}footer{font-size:.88rem;color:var(--muted);padding-top:22px}@media(max-width:650px){main{padding:24px 16px}.source-list{columns:1}th,td{padding:8px}section{padding:26px 0}}@media print{body{background:white}main{max-width:none;padding:0}.scroll{overflow:visible}table{font-size:8pt}nav{display:none}details>*{display:block}.source-list{columns:1}}
+
+
+img{max-width:100%;height:auto}pre{overflow:auto;padding:16px;background:#edf0ed}td{white-space:normal;min-width:80px}.scroll td{white-space:nowrap}code{overflow-wrap:anywhere}h2{margin-top:28px}</style></head><body><main><header><div class="meta">HDCOMPASS · RESULTS</div><h1>Project and run guide</h1><nav aria-label="Page sections"><a href="index.html">Overview</a><a href="report.html">Full report</a><a href="archive.html">All reports and figures</a><a href="results.zip">Download all results</a></nav></header><h1>hdcompass</h1>
+<p>Recover the head-direction (HD) &quot;internal compass&quot; from anterodorsal thalamic spikes <strong>without
+behavioural labels</strong>, decode it with uncertainty, and compare its dynamics across wake, REM and
+slow-wave sleep (SWS).</p>
+<h2>Question</h2>
+<p>The HD network is thought to be a ring attractor that keeps running during sleep (Peyrache et
+al. 2015). Can we find that ring from spikes alone, turn it into a decoder with calibrated
+uncertainty, and measure how the compass moves in each brain state — diffusion speed, jumps,
+confidence — using no tracked head angle at all?</p>
+<h2>Method</h2>
+<pre><code>spikes (ADn units)
+  │  population_rates: per-epoch counts → sqrt → Gaussian smooth → drop edge bins → z-score
+  ▼
+rate vectors (wake)
+  ├─► topology: PCA-10 → farthest-point landmarks → ripser H1
+  │        ring_score = top / second H1 lifetime, tested against a per-unit circular-shift null
+  └─► manifold: PCA-10 → Isomap (2-D) → Kåsa circle fit → ring angle θ̂(t)
+                     │
+                     ▼
+        tuning_from_ring: tuning curves against θ̂ (no behaviour used)
+                     │
+                     ▼
+        decode: exact grid HMM on the circle, per epoch
+                wrapped-Gaussian diffusion σ (fit by max marginal likelihood) + jump prob ε,
+                Poisson emissions → posterior mean angle + circular variance
+                     │
+                     ▼
+        dynamics per state (wake / REM / SWS): σ, median |speed|, jump fraction, mean variance
+
+validation only: align θ̂ to tracked head angle (sign + offset fitted on wake) → circular MAE
+</code></pre>
+<p>Synthetic ground truth (<code>synth.simulate_hd</code>: von Mises tuning, wrapped random-walk latent,
+optional Poisson jumps) is used by the tests and by the recovery-vs-cells benchmark.</p>
+<h2>Install</h2>
+<pre><code class="language-bash">python3 -m venv .venv
+.venv/bin/pip install -e '.[dev]'          # or add -c constraints.txt for the pinned set
+</code></pre>
+<p>Python ≥ 3.11, CPU only. Data: <code>Mouse32-140822.nwb</code> (Peyrache et al. 2015) is downloaded from
+OSF (~37 MB) into <code>~/.cache/hdcompass/</code> on first use, or pass <code>--data PATH</code>.</p>
+<h2>Quick smoke runs</h2>
+<pre><code class="language-bash">.venv/bin/hdcompass sweep   --quick --out /tmp/hdc_sweep   # 1 synthetic config, 60 s
+.venv/bin/hdcompass mouse32 --quick --out /tmp/hdc_m32     # 120 s of wake, REM and SWS each
+</code></pre>
+<p>Each writes <code>report.json</code> and PNG figures. Existing reports are never overwritten unless you
+pass <code>--overwrite</code>. The quick ring test is not meaningful: the density filter needs a full-length
+recording (RESULTS.md §6.1).</p>
+<h2>Full runs</h2>
+<pre><code class="language-bash">.venv/bin/pip install -e '.[dev,dandi]'           # dandi extra: streaming for DANDI:000939
+.venv/bin/python scripts/run_mouse32.py          # → results/mouse32/ (~12 min)
+.venv/bin/python scripts/run_synthetic_sweep.py  # → results/sweep/ (4 sizes × 3 κ × 3 seeds, ~1 h)
+.venv/bin/python scripts/validate.py real|synthetic|topology|sweep|decisions  # → results/validation/
+.venv/bin/python scripts/run_dandi000939.py       # 22 post-subiculum sessions (~1 h, streams ~60 MB each)
+</code></pre>
+<p><code>notebooks/figures.py</code> (jupytext percent format) regenerates all figures.</p>
+<h2>Results</h2>
+<p>Full runs and validation completed 2026-09-27. Details, tables and caveats are in
+<a href="report.html">RESULTS.md</a>. Headlines (Mouse32, 19 ADn units):</p>
+<ul>
+<li><strong>Label-free recovery works.</strong> The unsupervised ring angle tracks head direction with a
+held-out error of 0.42 rad. The fully label-free HMM decoder reaches 0.41 rad, against 0.58
+for independent bins and 0.21 for a decoder trained on tracked head angle.</li>
+<li><strong>Compass dynamics by state:</strong> σ = 0.54 (wake), 0.96 (REM), 2.97 (SWS) rad/√s. SWS is also
+about 10× less certain than wake. A uniform firing-rate gain drop doesn't explain this.</li>
+<li><strong>The ring test as first specified misses the ring</strong> on the full wake (score 1.04,
+p = 0.48). A density filter (k-NN codensity, Carlsson et al. 2008) adopted by pre-registered
+checks detects it (4.92, p = 1/201) and is now the pipeline default.</li>
+<li><strong>It generalises to a second dataset and region.</strong> On 22 post-subiculum sessions
+(DANDI:000939, analysis plan fixed in advance) the label-free decoder reaches a median
+0.36 rad. σ SWS &gt; wake in 21/22 (p = 1.8e-5), SWS &gt; REM in 19/20, and SWS variance &gt; wake in
+21/22. REM ≈ wake there, and the ring test detects a ring in only 12/22.</li>
+<li><strong>Validated on ground truth.</strong> Over 17,000 s Mouse32-shaped simulations (2 seeds), the
+label-free pipeline is within 0.012 rad of an oracle decoder in every state and recovers σ to
+the nearest grid point in wake and REM. It undercounts SWS jumps about 20×.</li>
+<li><strong>Real-data posteriors are overconfident:</strong> 90% intervals cover 64% (synthetic: 90–92%).</li>
+</ul>
+<h2>Limitations</h2>
+<ul>
+<li><strong>One ADn session, few cells.</strong> Mouse32-140822 has 31 ADn units; units under 1 Hz on wake
+are dropped (<code>min_rate</code>). The SWS result replicates on 22 post-subiculum sessions
+(DANDI:000939), but ADn replication needs more sessions (CRCNS th-1).</li>
+<li><strong>Isomap hyperparameters.</strong> <code>n_neighbors=15</code>, PCA to 10 dims and the 4000-point fit
+subsample are fixed choices, not tuned; the ring angle can depend on them.</li>
+<li><strong>Epoch-edge guard.</strong> pynapple's <code>smooth</code> zero-pads at epoch edges (pynapple#623). We smooth
+each epoch separately and drop bins within 2·<code>smooth_std</code> of every edge, which removes
+those bins from analysis rather than correcting them.</li>
+<li><strong>Sleep uses wake tuning.</strong> Tuning curves are fitted on wake and applied unchanged to REM and
+SWS. A uniform gain correction was tested and rejected by likelihood (RESULTS.md §3.5);
+per-cell rate changes are untested.</li>
+<li><strong>Jump probability ε is fixed</strong> (default 0), not fitted; only σ is chosen by likelihood.</li>
+<li><strong>Ring test resolution.</strong> With <code>n</code> shuffles the permutation p-value cannot go below
+<code>1/(n+1)</code>; <code>is_ring</code> therefore decides by the null's 95th percentile and reports p
+separately (5 shuffles in <code>--quick</code>, 20 in full runs). The ring test is the least sensitive
+stage: it found a ring in only 12 of 22 DANDI:000939 sessions, though decoding worked in most.</li>
+<li><strong>σ is quantised</strong> on a 12-point grid (factor 1.76 per step), and <strong>posterior variances are
+overconfident on real data</strong> (90% intervals cover 64%), so treat them as relative across
+states.</li>
+</ul>
+<h2>References</h2>
+<ul>
+<li>Peyrache A, Lacroix MM, Petersen PC, Buzsáki G (2015). Internally organized mechanisms of the
+head direction sense. <em>Nature Neuroscience</em> 18:569–575.</li>
+<li>Chaudhuri R, Gerçek B, Pandey B, Peyrache A, Fiete I (2019). The intrinsic attractor manifold
+and population dynamics of a canonical cognitive circuit across waking and sleep.
+<em>Nature Neuroscience</em> 22:1512–1520.</li>
+<li>Carlsson G, Ishkhanov T, de Silva V, Zomorodian A (2008). On the local behavior of spaces of
+natural images. <em>International Journal of Computer Vision</em> 76:1–12. (Codensity filter used
+by the ring test.)</li>
+<li>Duszkiewicz A, Skromne Carrasco S, Peyrache A (2026). Large-scale recordings of head direction
+cells in mouse postsubiculum (Version 0.260512.1701) [Data set]. DANDI Archive.
+https://doi.org/10.48324/dandi.000939/0.260512.1701 (CC-BY-4.0; original study Duszkiewicz
+et al. 2024, <em>Nature Neuroscience</em>).</li>
+<li>Rubin A, Sheintuch L, Brande-Eilat N, Pinchasof O, Rechavi Y, Geva N, Ziv Y (2019). Revealing
+neural correlates of behavior without behavioral measurements. <em>Nature Communications</em>
+10:4745.</li>
+</ul>
+<footer>Static results snapshot · No external dependencies</footer></main></body></html>

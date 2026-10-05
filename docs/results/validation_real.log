@@ -1,0 +1,34 @@
+/home/satvik/hdcompass/.venv/lib/python3.12/site-packages/pynapple/io/interface_nwb.py:133: UserWarning: DataFrame is not sorted by start times. Sorting it.
+  data = nap.IntervalSet(df)
+[real] fold: {'ring_angle_mae_rad': 0.41705894630041096, 'hmm_ring_tuning_mae_rad': 0.40982944042908653, 'independent_ring_tuning_mae_rad': 0.5910765284257079, 'hmm_head_tuning_mae_rad': 0.20621647818373995, 'hmm_head_tuning_hpd90_coverage': 0.6370625, 'hmm_head_tuning_hpd90_width_rad': 0.4318839050675618, 'hmm_head_tuning_mean_circ_variance': 0.006717134577131321, 'sigma_ring_train': 0.544606384655492, 'sigma_head_train': 0.544606384655492}
+[real] fold: {'ring_angle_mae_rad': 0.42207197226357207, 'hmm_ring_tuning_mae_rad': 0.40258437255677243, 'independent_ring_tuning_mae_rad': 0.5709168692549128, 'hmm_head_tuning_mae_rad': 0.20852966120666247, 'hmm_head_tuning_hpd90_coverage': 0.6481789239733295, 'hmm_head_tuning_hpd90_width_rad': 0.43036730789230293, 'hmm_head_tuning_mean_circ_variance': 0.006917857662760671, 'sigma_ring_train': 0.544606384655492, 'sigma_head_train': 0.544606384655492}
+[real] gain rem: {'gain_vs_wake': np.float64(0.863755619580027), 'uncorrected': {'sigma': 0.9581723581247718, 'eps': 0.0, 'median_abs_speed': 1.2625356214836252, 'jump_fraction': 0.00012478455167250294, 'mean_circ_variance': 0.013741997277291081, 'n_bins': 128250}, 'corrected': {'sigma': 0.9581723581247718, 'sigma_at_grid_edge': False, 'jump_fraction': 0.00010138744823390865, 'mean_circ_variance': 0.01374612538360878, 'loglik': -748239.869666574}, 'uncorrected_loglik': -746862.3562012715}
+[real] gain sws: {'gain_vs_wake': np.float64(0.7625583945877666), 'uncorrected': {'sigma': 2.965961142075257, 'eps': 0.0, 'median_abs_speed': 5.155387579731155, 'jump_fraction': 0.0018707987665630202, 'mean_circ_variance': 0.0676087400081548, 'n_bins': 620100}, 'corrected': {'sigma': 2.965961142075257, 'sigma_at_grid_edge': False, 'jump_fraction': 0.0020869082792521966, 'mean_circ_variance': 0.07457477969100205, 'loglik': -3607142.8376408257}, 'uncorrected_loglik': -3594822.611059257}
+[real] robustness {'n_neighbors': 10, 'seed': 0, 'ring_angle_mae_rad': 0.41656904380371385}
+[real] robustness {'n_neighbors': 15, 'seed': 0, 'ring_angle_mae_rad': 0.416650866523937}
+[real] robustness {'n_neighbors': 30, 'seed': 0, 'ring_angle_mae_rad': 0.4138050491226319}
+[real] robustness {'n_neighbors': 15, 'seed': 1, 'ring_angle_mae_rad': 0.4386271593849248}
+[real] robustness {'n_neighbors': 15, 'seed': 2, 'ring_angle_mae_rad': 0.40983141601247325}
+	Command being timed: ".venv/bin/python scripts/validate.py real"
+	User time (seconds): 259.02
+	System time (seconds): 34.59
+	Percent of CPU this job got: 135%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:36.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2814268
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 19
+	Minor (reclaiming a frame) page faults: 9049234
+	Voluntary context switches: 7014
+	Involuntary context switches: 26283
+	Swaps: 0
+	File system inputs: 36152
+	File system outputs: 40
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,77 @@
+{
+  "quick": true,
+  "n_units_total": 31,
+  "n_units_used": 19,
+  "n_units_decode": 19,
+  "settings": {
+    "density_keep": 0.5,
+    "density_k": 15,
+    "decode_min_rate": null
+  },
+  "durations_s": {
+    "wake": 120.0,
+    "rem": 120.0,
+    "sws": 120.0
+  },
+  "skipped_states": [],
+  "topology": {
+    "ring_score": 1.0347969295228274,
+    "null": [
+      1.023659138827039,
+      1.0945185102147366,
+      1.1276433277078126,
+      1.114263962771725,
+      1.4627841059036724
+    ],
+    "p": 0.8333333333333334,
+    "is_ring": false,
+    "n_shuffles": 5
+  },
+  "manifold": {
+    "align": {
+      "sign": -1,
+      "offset": 4.084976856238365
+    },
+    "ring_angle_mae_rad": 0.34308823887961887
+  },
+  "decode_wake_validation": {
+    "hmm_ring_tuning_mae_rad": 0.32239809102418854,
+    "independent_ring_tuning_mae_rad": 0.5642913972486843,
+    "hmm_head_tuning_mae_rad": 0.21200639572592883,
+    "align": {
+      "sign": -1,
+      "offset": 4.0781153070310125
+    }
+  },
+  "loglik": {
+    "wake": -31475.937418184156,
+    "rem": -41950.534245628376,
+    "sws": -42383.32465911051
+  },
+  "dynamics": {
+    "wake": {
+      "sigma": 0.7937005259840998,
+      "eps": 0.0,
+      "median_abs_speed": 0.8815840710306873,
+      "jump_fraction": 0.0,
+      "mean_circ_variance": 0.008423266456307036,
+      "n_bins": 6000
+    },
+    "rem": {
+      "sigma": 0.7937005259840998,
+      "eps": 0.0,
+      "median_abs_speed": 1.1575934532018408,
+      "jump_fraction": 0.0005002501250625312,
+      "mean_circ_variance": 0.010952419652501922,
+      "n_bins": 6000
+    },
+    "sws": {
+      "sigma": 6.299605249474366,
+      "eps": 0.0,
+      "median_abs_speed": 7.9911574353242045,
+      "jump_fraction": 0.026671111851975328,
+      "mean_circ_variance": 0.08445374457027924,
+      "n_bins": 6000
+    }
+  }
+}
