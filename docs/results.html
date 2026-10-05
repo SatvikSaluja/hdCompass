@@ -7,6 +7,8 @@
 <style>
 :root{color-scheme:light;--ink:#1e2933;--muted:#53616c;--rule:#dce2e6;--accent:#175b49}*{box-sizing:border-box}body{margin:0;background:#fafbf9;color:var(--ink);font:16px/1.65 system-ui,sans-serif}main{max-width:1140px;margin:auto;padding:42px 24px 64px}header{border-bottom:2px solid var(--ink);padding-bottom:24px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.2;margin:8px 0 16px;letter-spacing:-.035em}h2{font-size:1.65rem;margin:0 0 8px}h3{font-size:1.1rem;margin:28px 0 8px}p{max-width:850px}a{color:#165e79;text-underline-offset:3px}nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px}.meta,small,caption{color:var(--muted);font-size:.88rem}section{padding:34px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}.verdict{border-left:3px solid var(--accent);padding:9px 18px;background:#eef5f0;margin:18px 0}.limit{border-left-color:#976722;background:#faf3e8}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:14px 0 22px;font-variant-numeric:tabular-nums}caption{text-align:left;margin-bottom:10px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}th{background:#edf0ed;white-space:normal}td{white-space:nowrap}details{margin:20px 0}summary{cursor:pointer;font-weight:600}li{margin:7px 0}.source-list{columns:2;overflow-wrap:anywhere}footer{font-size:.88rem;color:var(--muted);padding-top:22px}@media(max-width:650px){main{padding:24px 16px}.source-list{columns:1}th,td{padding:8px}section{padding:26px 0}}@media print{body{background:white}main{max-width:none;padding:0}.scroll{overflow:visible}table{font-size:8pt}nav{display:none}details>*{display:block}.source-list{columns:1}}
 
+
+.lead-figure{margin:28px 0 0;padding-bottom:28px;border-bottom:1px solid var(--rule)}.lead-figure img{display:block;width:100%;max-width:540px;height:auto;margin:0 auto;background:white}.lead-figure figcaption{max-width:720px;margin:16px auto 0;color:var(--muted);font-size:.92rem}.lead-figure figcaption strong{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -18,6 +20,11 @@
   <p class="meta">Results recorded 27 Sep 2026 · Summary of the project's written report</p>
   <nav aria-label="Page sections"><a href="#results">Results</a><a href="#validation">Validation</a><a href="#terms">Reading the scores</a><a href="#sources">Source records</a><a href="report.html">Full report</a><a href="archive.html">All reports and figures</a></nav>
 </header>
+<figure class="lead-figure">
+  <a href="results/mouse32_frozen/ring.png" aria-label="Open the recovered ring figure at full size"><img src="results/mouse32_frozen/ring.png" width="540" height="480" fetchpriority="high" alt="Two-dimensional embedding of Mouse32 wake neural activity forming a broad ring, coloured by tracked head direction from zero to two pi radians."></a>
+  <figcaption><strong>A compass emerges from spikes alone.</strong> Wake activity from 19 ADn neurons in Mouse32 forms a ring in the two-dimensional Isomap embedding. Colour shows tracked head direction for validation; behavioural labels were not used to fit the embedding. <a href="results/mouse32_frozen/ring.png">View full-size figure</a>.</figcaption>
+</figure>
+
 <section id="results">
   <h2>Head direction without behavioural labels</h2>
   <p>The pipeline finds a ring-shaped representation of neural activity, estimates tuning from that ring, and uses a hidden Markov model (HMM) to decode the internal compass. Tracked head angle is used for validation and for the supervised reference decoder.</p>
