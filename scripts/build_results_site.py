@@ -32,8 +32,8 @@ def page(title, body):
         f'Overview</a><a href="report.html">Full report</a>'
         f'<a href="archive.html">All reports and figures</a>'
         f'<a href="results.zip">Download all results</a>'
-        f"</nav></header>{body}<footer>Static results snapshot "
-        f"· No external dependencies</footer></main></body>"
+        f"</nav></header>{body}<footer>Research results snapshot</footer>"
+        f"</main></body>"
         f"</html>"
     )
 
